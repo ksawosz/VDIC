@@ -68,19 +68,6 @@ module top;
             clk = ~clk;
         end
     end
-
-    //------------------------------------------------------------------------------
-    // reset task
-    //------------------------------------------------------------------------------
-    
-    task reset_uart();
-        rst_n = 0;
-        prog = 0;
-        sin = 1;
-        repeat (5) @(posedge clk);
-        rst_n = 1'b1;
-        repeat (5) @(posedge clk);
-    endtask 
     
     //------------------------------------------------------------------------------
     // Tester
@@ -107,13 +94,13 @@ module top;
         repeat (16) @(posedge clk);
 
         parity = 0;
-        for(i = 0; i <= 8; i++) begin
+        for(i = 7; i >= 0; i--) begin
             sin = data[i];
             parity ^= data[i];
             repeat (16) @(posedge clk);
         end
 
-        sin = ~parity;
+        sin = parity;
         repeat (16) @(posedge clk);
 
         sin = 1;
@@ -126,7 +113,9 @@ module top;
     
     initial begin
         byte addr, port, target, data;
-        reset_uart();
+        rst_n = 0;
+        repeat (16) @(posedge clk);
+        rst_n = 1;
 
         prog = 1;
         repeat (1) begin
@@ -144,7 +133,7 @@ module top;
         prog = 0;
         repeat (5) begin
             target = addr;
-            data = 8'b11100010;
+            data = 8'b11100011;
             uart_send_byte(target);
             uart_send_byte(data);
             $display("[%0t] Programmed target=%0h -> data=%0d", $time, target, data);
@@ -159,7 +148,11 @@ module top;
     final begin : finish_of_the_test
         print_test_result(test_result);
     end
-    
+
+    always @(sin) begin
+        $strobe("[%0t] sin zmiana -> %b ", $time, sin);
+    end
+
     //------------------------------------------------------------------------------
     // Other functions
     //------------------------------------------------------------------------------
