@@ -9,11 +9,8 @@
 ./INCA_libs/AMSD
 -define
 UVM_PLI
-../tb/../../common/tinyalu/tinyalu_pkg.sv
-../tb/../../common/tinyalu/single_cycle.sv
-../tb/../../common/tinyalu/three_cycle.sv
-../tb/../../common/tinyalu/tinyalu.sv
-../tb/switch_tb.sv
+../tb/../../common/simple_uart_switch.sv
+../tb/simple_uart_switch_tb.sv
 -NOWARN
 DSEM2009
 -NOWARN

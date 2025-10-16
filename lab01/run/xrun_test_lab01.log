@@ -1,12 +1,8 @@
-TOOL:	xrun(64)	24.09-s005: Started on Oct 10, 2025 at 14:01:29 CEST
+TOOL:	xrun(64)	24.09-s005: Started on Oct 16, 2025 at 21:24:14 CEST
 xrun
 	-F ../tb/tb.f
-		-F ../tb/../../common/tinyalu/tinyalu.f
-			tinyalu_pkg.sv
-			single_cycle.sv
-			three_cycle.sv
-			tinyalu.sv
-		switch_tb.sv
+		../../common/simple_uart_switch.sv
+		simple_uart_switch_tb.sv
 	-v93
 	+nowarnDSEM2009
 	+nowarnDSEMEL
@@ -28,13 +24,9 @@ Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /eda/
 		Caching library 'worklib' ....... Done
 	Elaborating the design hierarchy:
 	Top level design units:
-		tinyalu_pkg
 		top
 
 	Extracting FSMs for coverage:
-		worklib.single_cycle
-		worklib.three_cycle
-		worklib.tinyalu
 		worklib.top
 	Total FSMs extracted = 0
 	Building instance overlay tables: .................... Done
@@ -44,31 +36,35 @@ Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /eda/
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		              Instances  Unique
-		Modules:              4       4
-		Verilog packages:     1       1
-		Registers:           35      35
-		Scalar wires:        11       -
-		Vectored wires:       9       -
+		Modules:              2       2
+		Registers:           44      44
+		Scalar wires:        10       -
 		Always blocks:        3       3
-		Initial blocks:       4       4
+		Initial blocks:       3       3
 		Final blocks:         1       1
-		Cont. assignments:    6       8
-		Pseudo assignments:   4       -
-		Assertions:           1       1
-		Process Clocks:       2       1
+		Cont. assignments:    1       2
+		Pseudo assignments:   3       -
 	Writing initial simulation snapshot: worklib.top:sv
 Loading snapshot worklib.top:sv .................... Done
 xcelium> source /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/xcelium/files/xmsimrc
 xcelium> source /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
 xcelium> run
-19990 Clock cycles elapsed: 1000
-39990 Clock cycles elapsed: 2000
+[7870] Programmed addr=c6 -> port=0
+[16550] Programmed target=c6 -> data=106
+[24230] Programmed target=c6 -> data=106
+[31910] Programmed target=c6 -> data=106
+[39590] Programmed target=c6 -> data=106
+[47270] Programmed target=c6 -> data=106
 [1;30m[102m-----------------------------------
 ----------- Test PASSED -----------
 -----------------------------------[0m
 
-Simulation complete via $finish(1) at time 44900 NS + 0
-../tb/switch_tb.sv:181         $finish;
+[1;30m[102m-----------------------------------
+----------- Test PASSED -----------
+-----------------------------------[0m
+
+Simulation complete via $finish(1) at time 47270 NS + 0
+../tb/simple_uart_switch_tb.sv:154         $finish;
 xcelium> exit
 See ./cov_work/scope/test/icc.com file for message(s) on coverage constant object marking
 
@@ -79,6 +75,6 @@ coverage setup:
   testname :  test
 
 coverage files:
-  model(design data) :  ./cov_work/scope/icc_5e04705e_5c85f177.ucm
-  data               :  ./cov_work/scope/test/icc_5e04705e_5c85f177.ucd
-TOOL:	xrun(64)	24.09-s005: Exiting on Oct 10, 2025 at 14:01:31 CEST  (total: 00:00:02)
+  model(design data) :  ./cov_work/scope/icc_459a36c6_00000000.ucm
+  data               :  ./cov_work/scope/test/icc_459a36c6_00000000.ucd
+TOOL:	xrun(64)	24.09-s005: Exiting on Oct 16, 2025 at 21:24:17 CEST  (total: 00:00:03)

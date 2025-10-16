@@ -2,8 +2,5 @@
 // File created by:  xrun
 // Do not modify this file
 //
-/home/student/ksawosz/VDIC/common/tinyalu/tinyalu_pkg.sv
-/home/student/ksawosz/VDIC/common/tinyalu/single_cycle.sv
-/home/student/ksawosz/VDIC/common/tinyalu/three_cycle.sv
-/home/student/ksawosz/VDIC/common/tinyalu/tinyalu.sv
-/home/student/ksawosz/VDIC/lab01/tb/switch_tb.sv
+/home/student/ksawosz/VDIC/common/simple_uart_switch.sv
+/home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv

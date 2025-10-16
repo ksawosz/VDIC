@@ -1,2 +1,2 @@
--F ../../common/tinyalu/tinyalu.f
-switch_tb.sv
+../../common/simple_uart_switch.sv
+simple_uart_switch_tb.sv

@@ -1,14 +1,10 @@
-TOOL:	xrun(64)	24.09-s005: Started on Oct 10, 2025 at 14:01:28 CEST
+TOOL:	xrun(64)	24.09-s005: Started on Oct 16, 2025 at 21:27:33 CEST
 xrun
 	-elaborate
 	-l xrun_elaborate.log
 	-F ../tb/tb.f
-		-F ../tb/../../common/tinyalu/tinyalu.f
-			tinyalu_pkg.sv
-			single_cycle.sv
-			three_cycle.sv
-			tinyalu.sv
-		switch_tb.sv
+		../../common/simple_uart_switch.sv
+		simple_uart_switch_tb.sv
 	-v93
 	+nowarnDSEM2009
 	+nowarnDSEMEL
@@ -18,7 +14,9 @@ xrun
 	+nowarnXCLGNOPTM
 	+nowarnRNDXCELON
 	+nowarnSAWSTP
-	-xmlibdirname INCA_libs
+	-xmlibdirname INCA_libs_gui
+	+access+r
+	+gui
 	+overwrite
 	-nocopyright
 	-coverage all
@@ -27,44 +25,30 @@ xrun
 		Caching library 'worklib' ....... Done
 	Elaborating the design hierarchy:
 	Top level design units:
-		tinyalu_pkg
 		top
 
 	Extracting FSMs for coverage:
-		worklib.single_cycle
-		worklib.three_cycle
-		worklib.tinyalu
 		worklib.top
 	Total FSMs extracted = 0
 	Building instance overlay tables: .................... Done
 	Enabling instrumentation for coverage types: block expression FSM toggle functional
 	Generating native compiled code:
-		worklib.three_cycle:sv <0x00007536>
-			streams:   3, words:  4493
-		worklib.single_cycle:sv <0x5180109a>
-			streams:   3, words:  3182
-		worklib.tinyalu:sv <0x134b3a59>
-			streams:   7, words:  4797
-		worklib.top:sv <0x0d44b08d>
-			streams:  15, words: 28015
-		worklib.tinyalu_pkg:sv <0x01194eac>
-			streams:   1, words:   321
+		worklib.simple_switch_uart:sv <0x31f5ca7e>
+			streams:  13, words: 17311
+		worklib.top:sv <0x267ae2b9>
+			streams:  12, words: 23298
 	Building instance specific data structures.
 	Performing constant object marking (COM) analysis.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		              Instances  Unique
-		Modules:              4       4
-		Verilog packages:     1       1
-		Registers:           35      35
-		Scalar wires:        11       -
-		Vectored wires:       9       -
+		Modules:              2       2
+		Registers:           44      44
+		Scalar wires:        10       -
 		Always blocks:        3       3
-		Initial blocks:       4       4
+		Initial blocks:       3       3
 		Final blocks:         1       1
-		Cont. assignments:    6       8
-		Pseudo assignments:   4       -
-		Assertions:           1       1
-		Process Clocks:       2       1
+		Cont. assignments:    1       2
+		Pseudo assignments:   3       -
 	Writing initial simulation snapshot: worklib.top:sv
-TOOL:	xrun(64)	24.09-s005: Exiting on Oct 10, 2025 at 14:01:29 CEST  (total: 00:00:01)
+TOOL:	xrun(64)	24.09-s005: Exiting on Oct 16, 2025 at 21:27:34 CEST  (total: 00:00:01)
