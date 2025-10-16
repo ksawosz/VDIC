@@ -20,7 +20,7 @@
 
 #------------------------------------------------------------------------------
 # The list of tests; in GUI mode only the first test is started.
-TESTS=(lab01_example);
+TESTS=(lab01);
 #------------------------------------------------------------------------------
 # Default .f file
 FFILE="../tb/tb.f"

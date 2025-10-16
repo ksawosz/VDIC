@@ -1,0 +1,174 @@
+*** Start analyzing build configuration ***
+INFO: Auto-config - Scanning: /home/student/ksawosz/VDIC
+INFO: Auto-config - VLOG: /home/student/ksawosz/VDIC
+INFO: Auto-config - VHDL: /home/student/ksawosz/VDIC
+INFO: Auto-config - Wrote:
+    .dvt/default.build.auto.1
+*** List of included argument files ***
+    Build configuration file:  /home/student/ksawosz/VDIC/.dvt/default.build
+    -f /home/student/ksawosz/VDIC/.dvt/default.build.auto.1
+*** List of invocations ***
+Invocation #1 +dvt_init+dvt in /home/student/ksawosz/VDIC/.dvt/default.build.auto.1 at line 9
+*** Done analyzing build configuration [940 ms] ***
+*** Start VHDL build ***
+Total number of lines [0]
+Performing post full build step 1 (VHDL - RU) [8 ms] ...
+*** Done VHDL build [1s.421ms] ***
+*** Start SystemVerilog build ***
+*** Invocation #1***
+Loading (1) /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv ...
+Done /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [549 ms, 240 lines, SystemVerilog_2012] ...
+Loading (2) /home/student/ksawosz/VDIC/lab01example/tb/tinyalu_tb.sv ...
+Done /home/student/ksawosz/VDIC/lab01example/tb/tinyalu_tb.sv [75 ms, 274 lines, SystemVerilog_2012] ...
+Loading (3) /home/student/ksawosz/VDIC/common/simple_uart_switch.sv ...
+Done /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [15 ms, 175 lines, SystemVerilog_2012] ...
+Loading (4) /home/student/ksawosz/VDIC/common/tinyalu/three_cycle.sv ...
+Done /home/student/ksawosz/VDIC/common/tinyalu/three_cycle.sv [18 ms, 49 lines, SystemVerilog_2012] ...
+Loading (5) /home/student/ksawosz/VDIC/common/tinyalu/tinyalu_pkg.sv ...
+Done /home/student/ksawosz/VDIC/common/tinyalu/tinyalu_pkg.sv [4 ms, 29 lines, SystemVerilog_2012] ...
+Loading (6) /home/student/ksawosz/VDIC/common/tinyalu/tinyalu.sv ...
+Done /home/student/ksawosz/VDIC/common/tinyalu/tinyalu.sv [6 ms, 70 lines, SystemVerilog_2012] ...
+Loading (7) /home/student/ksawosz/VDIC/common/tinyalu/single_cycle.sv ...
+Done /home/student/ksawosz/VDIC/common/tinyalu/single_cycle.sv [20 ms, 58 lines, SystemVerilog_2012] ...
+*** Done invocation #1 [262 ms] ***
+*** Total number of lines [895] ***
+Performing post full build actions ...
+Performing post full build step 1 (SRI) [0 ms] ...
+Performing post full build step 2 (RI) [2 ms] ...
+Performing post full build step 3 (RCP) [0 ms] ...
+*** Done SystemVerilog build [798 ms] ***
+*** Start mixed mode extension build ***
+Performing mixed post full build step (VHDL - RU) [7 ms] ...
+Performing mixed post full build step (VHDL - RT) [221 ms] ...
+Performing mixed post full build step (VHDL - RD) [6 ms] ...
+Performing mixed post full build step (VHDL - FSC) [238 ms] ...
+Performing mixed post full build step (VLOG - RI) [1 ms] ...
+*** Warning: UNSPECIFIED_TOP: Please specify a -top module/entity/configuration in the project build file
+*** Top design candidates: work.top, work.tinyalu
+Performing mixed post full build step (MIXED - ELAB) [482 ms] ...
+Performing mixed post full build step (MIXED - UNEL) [102 ms] ...
+*** Error: NON_EXISTING_TYPE: Non existing type 'operation_t'
+    at line 70 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'no_op' is not declared
+    at line 74 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'add_op' is not declared
+    at line 75 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'and_op' is not declared
+    at line 76 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'xor_op' is not declared
+    at line 77 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'mul_op' is not declared
+    at line 78 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'no_op' is not declared
+    at line 79 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'rst_op' is not declared
+    at line 80 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'rst_op' is not declared
+    at line 81 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'op_set' is not declared
+    at line 107 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'A' is not declared
+    at line 108 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'B' is not declared
+    at line 109 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'start' is not declared
+    at line 110 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'op_set' is not declared
+    at line 111 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'no_op' is not declared
+    at line 112 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'start' is not declared
+    at line 114 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'rst_op' is not declared
+    at line 116 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'done' is not declared
+    at line 120 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'start' is not declared
+    at line 122 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'A' is not declared
+    at line 127 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'B' is not declared
+    at line 127 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'op_set' is not declared
+    at line 127 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'result' is not declared
+    at line 128 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'A' is not declared
+    at line 134 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'B' is not declared
+    at line 134 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'op' is not declared
+    at line 134 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'result' is not declared
+    at line 135 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'start' is not declared
+    at line 157 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'reset_n' is not declared
+    at line 158 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'reset_n' is not declared
+    at line 160 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: NON_EXISTING_TYPE: Non existing type 'operation_t'
+    at line 170 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'and_op' is not declared
+    at line 177 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'add_op' is not declared
+    at line 178 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'mul_op' is not declared
+    at line 179 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'xor_op' is not declared
+    at line 180 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: NON_EXISTING_TYPE: Non existing type 'print_color_t'
+    at line 201 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLACK_ON_GREEN' is not declared
+    at line 204 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLACK_ON_RED' is not declared
+    at line 205 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLACK_ON_YELLOW' is not declared
+    at line 206 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLUE_ON_WHITE' is not declared
+    at line 207 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BLUE_ON_WHITE' is not declared
+    at line 208 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_DEFAULT' is not declared
+    at line 209 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLACK_ON_GREEN' is not declared
+    at line 220 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_DEFAULT' is not declared
+    at line 224 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_BOLD_BLACK_ON_RED' is not declared
+    at line 228 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Error: UNDECLARED_IDENTIFIER: Identifier 'COLOR_DEFAULT' is not declared
+    at line 232 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Warning: UNDECLARED_MODULE: Module 'simple_uart_switch' is not declared
+    at line 49 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv [compile index 1]
+*** Warning: UNELABORATED_MODULE: Module 'work.top' is not elaborated
+    at line 21 in /home/student/ksawosz/VDIC/lab01example/tb/tinyalu_tb.sv [compile index 2]
+*** Warning: UNELABORATED_MODULE: Module 'work.simple_switch_uart' is not elaborated
+    at line 25 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+Performing mixed post full build step (VHDL - ELPC) [0 ms] ...
+Performing mixed post full build step (VHDL - US) [1 ms] ...
+Performing mixed post full build step (VHDL - USBD) [63 ms] ...
+Performing mixed post full build step (VLOG - RD) [10 ms] ...
+Performing mixed post full build step (VLOG - FSC) [51 ms] ...
+Performing mixed post full build step (VLOG - EV) [76 ms] ...
+Performing mixed post full build step (VLOG - ELPC) [2 ms] ...
+Performing mixed post full build step (VLOG - US) [112 ms] ...
+*** Warning: DUPLICATE_MODULE: Duplicate module 'top', already declared
+    at line 21 in /home/student/ksawosz/VDIC/lab01/tb/simple_uart_switch_tb.sv
+    at line 21 in /home/student/ksawosz/VDIC/lab01example/tb/tinyalu_tb.sv [compile index 2]
+*** Warning: SIGNAL_NEVER_USED: Signal 'clk' is never used
+    at line 26 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: SIGNAL_NEVER_USED: Signal 'rst_n' is never used
+    at line 27 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: SIGNAL_NEVER_USED: Signal 'prog' is never used
+    at line 28 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: SIGNAL_NEVER_USED: Signal 'sin' is never used
+    at line 29 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: SIGNAL_NEVER_USED: Signal 'sout0' is never used
+    at line 30 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: SIGNAL_NEVER_USED: Signal 'sout1' is never used
+    at line 31 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Warning: PARAMETER_NEVER_USED: Parameter 'CLKS_PER_BIT' is never used
+    at line 34 in /home/student/ksawosz/VDIC/common/simple_uart_switch.sv [compile index 3]
+*** Done mixed mode extension build [1s.418ms] ***
+*** Total build time [4s.607ms] ***
