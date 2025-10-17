@@ -50,6 +50,8 @@ module top;
     bit                  sout1;
     
     test_result_t        test_result = TEST_PASSED;
+    int     function_call = 0;
+    int                OK_bit = 0;
     
     //------------------------------------------------------------------------------
     // DUT instantiation
@@ -90,6 +92,7 @@ module top;
     task uart_send_byte(input byte data);
         int i;
         bit parity;
+        
         sin = 0;
         repeat (16) @(posedge clk);
 
@@ -107,6 +110,93 @@ module top;
         repeat (16) @(posedge clk);
 
     endtask
+
+    task uart_send_check(input byte data, input byte port);
+        int i;
+        bit parity;
+        parity = 0;
+        function_call++;
+        repeat (8) @(posedge clk);
+
+        if(port == 8'b00000001) begin
+            if(sout1 == 0) begin
+                OK_bit++;
+            end
+            repeat (16) @(posedge clk);
+
+            for(i = 7; i >= 0; i--) begin
+                if(sout1 == data[i]) begin
+                    OK_bit++;
+                    parity ^= data[i];
+                    repeat (16) @(posedge clk);
+                end
+                else begin
+                    repeat (16) @(posedge clk);
+                end
+            end
+            
+            if(sout1 == parity) begin
+                OK_bit++;
+            end
+            repeat (16) @(posedge clk);
+
+            if(sout1 == 1) begin
+                OK_bit++;
+            end
+            repeat (8) @(posedge clk);
+        end
+        else begin
+            if(sout0 == 0) begin
+                OK_bit++;
+            end
+            repeat (16) @(posedge clk);
+
+            for(i = 7; i >= 0; i--) begin
+                if(sout0 == data[i]) begin
+                    OK_bit++;
+                    parity ^= data[i];
+                    repeat (16) @(posedge clk);
+                end
+                else begin
+                    repeat (16) @(posedge clk);
+                end
+            end
+            
+            if(sout0 == parity) begin
+                OK_bit++;
+            end
+            repeat (16) @(posedge clk);
+
+            if(sout0 == 1) begin
+                OK_bit++;
+            end
+            repeat (8) @(posedge clk);
+        end
+    endtask
+
+    task send_wrong_packet(input byte data);
+        int i;
+        bit parity;
+        
+        sin = 0;
+        repeat (16) @(posedge clk);
+
+        parity = 0;
+        for(i = 7; i >= 0; i--) begin
+            sin = data[i];
+            parity ^= data[i];
+            repeat (16) @(posedge clk);
+        end
+
+        sin = parity;
+        repeat (16) @(posedge clk);
+
+        sin = 0;
+        repeat (16) @(posedge clk);
+
+    endtask
+
+    
     
     //------------------------
     // Tester main
@@ -118,39 +208,77 @@ module top;
         rst_n = 1;
 
         prog = 1;
-        repeat (1) begin
-            //addr = get_data();
-            //port = $urandom_range(0, 1);
-            addr = 8'b11111110;
-            port = 0;
-            uart_send_byte(addr);
-            uart_send_byte(port);
-            $display("[%0t] Programmed addr=%0h -> port=%0d", $time, addr, port);
-        end
-
-        repeat (50) @(posedge clk);
+        //addr = get_data();
+        //port = $urandom_range(0, 1);
+        addr = 8'b11111110;
+        port = 0;
+        uart_send_byte(addr);
+        uart_send_byte(port);
 
         prog = 0;
-        repeat (5) begin
-            target = addr;
-            data = 8'b11100011;
-            uart_send_byte(target);
-            uart_send_byte(data);
-            $display("[%0t] Programmed target=%0h -> data=%0d", $time, target, data);
-        end
+        target = addr;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        uart_send_check(target, port);
+        uart_send_check(data, port);
 
+        prog = 1;
+        //addr = get_data();
+        //port = $urandom_range(0, 1);
+        addr = 8'b11111110;
+        port = 0;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+
+        prog = 0;
+        target = addr;         
+        data = 8'b00000000;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        uart_send_check(target, port);
+        uart_send_check(data, port);
+
+        prog = 1;
+        //addr = get_data();
+        //port = $urandom_range(0, 1);
+        addr = 8'b11111110;
+        port = 0;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+
+        prog = 0;
+        target = addr;         
+        data = 8'b11100011;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        uart_send_check(target, port);
+        uart_send_check(data, port);
+
+        prog = 1;
+        //addr = get_data();
+        //port = $urandom_range(0, 1);
+        addr = 8'b11111110;
+        port = 0;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+
+        prog = 0;
+        target = addr;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        uart_send_check(target, port);
+        uart_send_check(data, port);
+
+        if(OK_bit == function_call * 11) begin
+            test_result = TEST_PASSED;
+        end
+        else begin
+            test_result = TEST_FAILED;
+        end
         print_test_result(test_result);
         $finish;
-    end
-    
-    //------------------------------------------------------------------------------
-    // Temporary. The scoreboard will be later used for checking the data
-    final begin : finish_of_the_test
-        print_test_result(test_result);
-    end
-
-    always @(sin) begin
-        $strobe("[%0t] sin zmiana -> %b ", $time, sin);
     end
 
     //------------------------------------------------------------------------------
