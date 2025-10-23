@@ -37,6 +37,8 @@ module top;
         COLOR_BLUE_ON_WHITE,
         COLOR_DEFAULT
     } print_color_t;
+
+    //`define DEBUG
     
     //------------------------------------------------------------------------------
     // Local variables
@@ -164,7 +166,9 @@ module top;
             for(int k = 0; k < 2; k++) begin
                 parity = 0;
                 repeat (8) @(posedge clk);
+                `ifdef DEBUG
                 $display("1 err = ", err_packet);
+                `endif
                 if(sin == 0) begin
                     if(!k) begin
                         data_out[0] = sin;
@@ -176,8 +180,9 @@ module top;
                 else begin
                     err_packet = 1;
                 end
-
+                `ifdef DEBUG
                 $display("2 err = ", err_packet);
+                `endif
 
                 for(i = 0; i < 8; i++) begin
                     repeat (16) @(posedge clk);
@@ -203,8 +208,9 @@ module top;
                 else begin
                     err_packet = 1;
                 end
-
+                `ifdef DEBUG
                 $display("3 err = ", err_packet);
+                `endif
 
                 repeat (16) @(posedge clk);
                 if(sin == 1) begin
@@ -218,8 +224,9 @@ module top;
                 else begin
                     err_packet = 1;
                 end
-
+                `ifdef DEBUG
                 $display("4 err = ", err_packet);
+                `endif
 
                 repeat (8) @(posedge clk);
             end
@@ -250,16 +257,24 @@ module top;
         forever begin
 
             wait(packet_end == 1);
+            `ifdef DEBUG
                 $display("packet_end=",packet_end);
                 $display("data_queue size = ", data_queue.size());
+            `endif
             if (packet_end == 1 && data_queue.size() > 0) begin
                 packet_end = 0;
+
+                `ifdef DEBUG
                 $display("packet_end=",packet_end);
+                `endif
+
                 for (int i = 0; i < data_queue.size(); i++) begin
                     pkt = data_queue[i];
-    
+
+                    `ifdef DEBUG
                     $display("[%0t] MONITOR: pkt[%0d] addr=0x%0h port=%0b is_prog=%0b is_err=%0b", 
                              $time, i, pkt.addr, pkt.port, pkt.is_prog, pkt.is_err);
+                    `endif
     
                     if (pkt.is_prog) begin
                         int found_idx[$];
@@ -270,11 +285,17 @@ module top;
                             new_entry.addr = pkt.addr;
                             new_entry.port = pkt.port;
                             prog_table.push_back(new_entry);
+
+                            `ifdef DEBUG
                             $display("[%0t] PROG: dodano addr=0x%0h -> port=%0b", $time, pkt.addr, pkt.port);
+                            `endif
                         end
                         else begin
                             prog_table[found_idx[0]].port = pkt.port;
+
+                            `ifdef DEBUG
                             $display("[%0t] PROG: nadpisano addr=0x%0h -> port=%0b", $time, pkt.addr, pkt.port);
+                            `endif
                         end
                     end
                     else begin
@@ -282,7 +303,10 @@ module top;
                         found_idx = prog_table.find_index with (item.addr == pkt.addr);
     
                         if (found_idx.size() == 0) begin
+
+                            `ifdef DEBUG
                             $display("[%0t] ERR: Otrzymano pakiet danych dla nieznanego adresu 0x%0h — to błąd!", $time, pkt.addr);
+                            `endif
                             test_result = TEST_FAILED;
                         end
                         else begin
@@ -291,11 +315,19 @@ module top;
                             
                             if (expected_port == 0) begin
                                 if (sout0 == pkt.is_err) begin
+
+                                    `ifdef DEBUG
                                     $display("\n[%0t] PASS: Dane dla addr=0x%0h pojawiły się na sout0\n", $time, pkt.addr);
+                                    `endif
+                                    
                                     if(pkt.is_err == 0) begin
                                         for(int h=0; h<22; h++) begin
                                             if(data_out[h] != sout0) begin
+
+                                                `ifdef DEBUG
                                                 $display("dataot = ", data_out[h]," sout0 = ", sout0);
+                                                `endif
+
                                                 test_result = TEST_FAILED;
                                             end
                                             repeat (16) @(posedge clk);
@@ -311,17 +343,29 @@ module top;
 
                                 end
                                 else begin
+
+                                    `ifdef DEBUG
                                     $display("[%0t] FAIL: Dane dla addr=0x%0h NIE pojawiły się na sout0", $time, pkt.addr);
+                                    `endif
+
                                     test_result = TEST_FAILED;
                                 end
                             end
                             else begin
                                 if (sout1 == pkt.is_err) begin
+
+                                    `ifdef DEBUG
                                     $display("[%0t] PASS: Dane dla addr=0x%0h pojawiły się na sout1", $time, pkt.addr);
+                                    `endif
+
                                     if(pkt.is_err == 0) begin
                                         for(int h=0; h<22; h++) begin
                                             if(data_out[h] != sout1) begin
+
+                                                `ifdef DEBUG
                                                 $display("dataot = ", data_out[h]," sout1 = ", sout1);
+                                                `endif
+
                                                 test_result = TEST_FAILED;
                                             end
                                             repeat (16) @(posedge clk);
@@ -336,7 +380,11 @@ module top;
                                     end
                                 end
                                 else begin
+
+                                    `ifdef DEBUG
                                     $display("[%0t] FAIL: Dane dla addr=0x%0h NIE pojawiły się na sout1", $time, pkt.addr);
+                                    `endif
+
                                     test_result = TEST_FAILED;
                                 end
                             end
