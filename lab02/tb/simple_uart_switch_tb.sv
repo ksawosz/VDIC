@@ -50,13 +50,18 @@ module top;
     bit                  sout1;
     
     test_result_t        test_result = TEST_PASSED;
-    int                  function_call = 0;
-    int                  OK_bit = 0;
     logic                [21:0] data_out;
-    bit                  err_packet;
     bit                  packet_end;
 
-    logic                [11:0] data_queue [$];
+    typedef struct packed {
+        logic [10:0] addr;  
+        bit         port;   
+        bit         is_prog; 
+        bit         is_err;
+    } pkt_t;
+    
+    pkt_t data_queue[$];
+    
     
     //------------------------------------------------------------------------------
     // DUT instantiation
@@ -116,68 +121,6 @@ module top;
 
     endtask
 
-    task uart_send_check(input byte data, input byte port);
-        int i;
-        bit parity;
-        parity = 0;
-        function_call++;
-        repeat (8) @(posedge clk);
-
-        if(port == 8'b00000001) begin
-            if(sout1 == 0) begin
-                OK_bit++;
-            end
-            repeat (16) @(posedge clk);
-
-            for(i = 7; i >= 0; i--) begin
-                if(sout1 == data[i]) begin
-                    OK_bit++;
-                    parity ^= data[i];
-                    repeat (16) @(posedge clk);
-                end
-                else begin
-                    repeat (16) @(posedge clk);
-                end
-            end
-            
-            if(sout1 == parity) begin
-                OK_bit++;
-            end
-            repeat (16) @(posedge clk);
-
-            if(sout1 == 1) begin
-                OK_bit++;
-            end
-            repeat (8) @(posedge clk);
-        end
-        else begin
-            if(sout0 == 0) begin
-                OK_bit++;
-            end
-            repeat (16) @(posedge clk);
-
-            for(i = 7; i >= 0; i--) begin
-                if(sout0 == data[i]) begin
-                    OK_bit++;
-                    parity ^= data[i];
-                    repeat (16) @(posedge clk);
-                end
-                else begin
-                    repeat (16) @(posedge clk);
-                end
-            end
-            
-            if(sout0 == parity) begin
-                OK_bit++;
-            end
-            repeat (16) @(posedge clk);
-
-            if(sout0 == 1) begin
-                OK_bit++;
-            end
-            repeat (8) @(posedge clk);
-        end
-    endtask
 
     task send_wrong_packet(input byte data);
         int i;
@@ -208,127 +151,203 @@ module top;
         int i;
         bit parity;
         logic [11:0] addr_port;
-        packet_end = 0;
+        pkt_t newpkt;
+        bit err_packet;
         parity = 0;
         data_out[21:0] = 0;
         err_packet = 0;
 
-        @(negedge sin);
-
-        for(int k = 0; k < 2; k++) begin
-            repeat (8) @(posedge clk);
-            if(sin == 0) begin
-                if(!k) begin
-                    data_out[0] = sin;
-                end
-                else begin
-                    data_out[11] = sin;
-                end
-            end
-            else begin
-                err_packet = 1;
-            end
-
-            for(i = 0; i < 8; i++) begin
-                repeat (16) @(posedge clk);
-                if(!k) begin
-                    data_out[i+1] = sin;
-                    parity ^= data_out[i+1];
-                end
-                else begin
-                    data_out[i+12] = sin;
-                    parity ^= data_out[i+12];
-                end
-            end
-
-            repeat (16) @(posedge clk);
-            if(sin == parity) begin
-                if(!k) begin
-                    data_out[9] = sin;
-                end
-                else begin
-                    data_out[20] = sin;
-                end
-            end
-            else begin
-                err_packet = 1;
-            end
-
-            repeat (16) @(posedge clk);
-            if(sin == 1) begin
-                if(!k) begin
-                    data_out[10] = sin;
-                end
-                else begin
-                    data_out[21] = sin;
-                end
-            end
-            else begin
-                err_packet = 1;
-            end
-
-            if(prog == 1) begin
-                data_queue.push_front({data_out[12], data_out[10:0]});
-            end
-
-            repeat (8) @(posedge clk);
-        end
-        packet_end = 1;
-    end
-
-
-    initial begin
-        int index_queue [$];
         forever begin
-            @(posedge clk);
-            if(packet_end == 1) begin
+            @(negedge sin);
+            err_packet = 0;
+
+            for(int k = 0; k < 2; k++) begin
+                parity = 0;
                 repeat (8) @(posedge clk);
-                if(sout0 == 0) begin
-                    for(int i = 0; i < 11; i++) begin
-                        
+                $display("1 err = ", err_packet);
+                if(sin == 0) begin
+                    if(!k) begin
+                        data_out[0] = sin;
+                    end
+                    else begin
+                        data_out[11] = sin;
                     end
                 end
                 else begin
+                    err_packet = 1;
+                end
 
-                end
-            end
+                $display("2 err = ", err_packet);
 
-            if(data_queue[index_queue[0]][11] == 0) begin
-                if((err_packet == 0) && (packet_end == 1) && (index_queue.size() > 0)) begin
-                    for(int i = 0; i < 22; i++) begin
-                        if(sout0 == data_out[i]) begin
-                            OK_bit++;
-                        end
-                        repeat (16) @(posedge clk);
+                for(i = 0; i < 8; i++) begin
+                    repeat (16) @(posedge clk);
+                    if(!k) begin
+                        data_out[i+1] = sin;
+                        parity ^= data_out[i+1];
+                    end
+                    else begin
+                        data_out[i+12] = sin;
+                        parity ^= data_out[i+12];
                     end
                 end
-                else if((err_packet == 1) && (packet_end == 1)) begin
-                    repeat (8) @(posedge clk);
-                    if(sout0 == 1) begin
-                        OK_bit++;
+
+                repeat (16) @(posedge clk);
+                if(sin == parity) begin
+                    if(!k) begin
+                        data_out[9] = sin;
+                    end
+                    else begin
+                        data_out[20] = sin;
                     end
                 end
+                else begin
+                    err_packet = 1;
+                end
+
+                $display("3 err = ", err_packet);
+
+                repeat (16) @(posedge clk);
+                if(sin == 1) begin
+                    if(!k) begin
+                        data_out[10] = sin;
+                    end
+                    else begin
+                        data_out[21] = sin;
+                    end
+                end
+                else begin
+                    err_packet = 1;
+                end
+
+                $display("4 err = ", err_packet);
+
+                repeat (8) @(posedge clk);
             end
-            else begin
-                if((err_packet == 0) && (packet_end == 1)) begin
-                    repeat (8) @(posedge clk);
-                    for(int i = 0; i < 22; i++) begin
-                        if(sout1 == data_out[i]) begin
-                            OK_bit++;
-                        end
-                        repeat (16) @(posedge clk);
-                    end
-                end
-                else if((err_packet == 1) && (packet_end == 1)) begin
-                    repeat (8) @(posedge clk);
-                    if(sout1 == 1) begin
-                        OK_bit++;
-                    end
-                end
-            end
-        end
         
+                newpkt.addr    = data_out[8:1];     
+                newpkt.port    = data_out[12];       
+                newpkt.is_prog = prog;               
+                newpkt.is_err  = err_packet;
+                data_queue.push_back(newpkt);        
+                
+
+            packet_end = 1;
+        end
     end
+
+
+    initial begin : monitor_and_check
+        typedef struct {
+            logic [10:0] addr;
+            bit         port;
+        } addr_map_t;
+    
+        addr_map_t prog_table[$]; 
+        pkt_t      pkt;
+        int        fi;
+        bit        expected_port;
+    
+        forever begin
+
+            wait(packet_end == 1);
+                $display("packet_end=",packet_end);
+                $display("data_queue size = ", data_queue.size());
+            if (packet_end == 1 && data_queue.size() > 0) begin
+                packet_end = 0;
+                $display("packet_end=",packet_end);
+                for (int i = 0; i < data_queue.size(); i++) begin
+                    pkt = data_queue[i];
+    
+                    $display("[%0t] MONITOR: pkt[%0d] addr=0x%0h port=%0b is_prog=%0b is_err=%0b", 
+                             $time, i, pkt.addr, pkt.port, pkt.is_prog, pkt.is_err);
+    
+                    if (pkt.is_prog) begin
+                        int found_idx[$];
+                        found_idx = prog_table.find_index with (item.addr == pkt.addr);
+    
+                        if (found_idx.size() == 0) begin
+                            addr_map_t new_entry;
+                            new_entry.addr = pkt.addr;
+                            new_entry.port = pkt.port;
+                            prog_table.push_back(new_entry);
+                            $display("[%0t] PROG: dodano addr=0x%0h -> port=%0b", $time, pkt.addr, pkt.port);
+                        end
+                        else begin
+                            prog_table[found_idx[0]].port = pkt.port;
+                            $display("[%0t] PROG: nadpisano addr=0x%0h -> port=%0b", $time, pkt.addr, pkt.port);
+                        end
+                    end
+                    else begin
+                        int found_idx[$];
+                        found_idx = prog_table.find_index with (item.addr == pkt.addr);
+    
+                        if (found_idx.size() == 0) begin
+                            $display("[%0t] ERR: Otrzymano pakiet danych dla nieznanego adresu 0x%0h — to błąd!", $time, pkt.addr);
+                            test_result = TEST_FAILED;
+                        end
+                        else begin
+                            expected_port = prog_table[found_idx[0]].port;
+                            repeat (8) @(posedge clk);
+                            
+                            if (expected_port == 0) begin
+                                if (sout0 == pkt.is_err) begin
+                                    $display("\n[%0t] PASS: Dane dla addr=0x%0h pojawiły się na sout0\n", $time, pkt.addr);
+                                    if(pkt.is_err == 0) begin
+                                        for(int h=0; h<22; h++) begin
+                                            if(data_out[h] != sout0) begin
+                                                $display("dataot = ", data_out[h]," sout0 = ", sout0);
+                                                test_result = TEST_FAILED;
+                                            end
+                                            repeat (16) @(posedge clk);
+                                        end
+                                    end
+                                    else begin
+                                        for(int h=0; h<22; h++) begin
+                                            if(sout0 != 1) begin
+                                                test_result = TEST_FAILED;
+                                            end
+                                        end
+                                    end
+
+                                end
+                                else begin
+                                    $display("[%0t] FAIL: Dane dla addr=0x%0h NIE pojawiły się na sout0", $time, pkt.addr);
+                                    test_result = TEST_FAILED;
+                                end
+                            end
+                            else begin
+                                if (sout1 == pkt.is_err) begin
+                                    $display("[%0t] PASS: Dane dla addr=0x%0h pojawiły się na sout1", $time, pkt.addr);
+                                    if(pkt.is_err == 0) begin
+                                        for(int h=0; h<22; h++) begin
+                                            if(data_out[h] != sout1) begin
+                                                $display("dataot = ", data_out[h]," sout1 = ", sout1);
+                                                test_result = TEST_FAILED;
+                                            end
+                                            repeat (16) @(posedge clk);
+                                        end
+                                    end
+                                    else begin
+                                        for(int h=0; h<22; h++) begin
+                                            if(sout1 != 1) begin
+                                                test_result = TEST_FAILED;
+                                            end
+                                        end
+                                    end
+                                end
+                                else begin
+                                    $display("[%0t] FAIL: Dane dla addr=0x%0h NIE pojawiły się na sout1", $time, pkt.addr);
+                                    test_result = TEST_FAILED;
+                                end
+                            end
+                        end
+                        data_queue.delete(i);
+                    end
+                end
+            end 
+        end 
+    end 
+    
 
     
     
@@ -342,33 +361,64 @@ module top;
         repeat (16) @(posedge clk);
         rst_n = 1;
 
-        /*prog = 1;
-        addr = get_data();
-        port = $urandom_range(0, 1);
+        prog = 1;
+        addr = 8'b11100011;
+        port = 8'b10000000;
         uart_send_byte(addr);
         uart_send_byte(port);
-
-        prog = 0;
-        target = addr;         
-        data = 8'b11111111;
-        uart_send_byte(target);
-        uart_send_byte(data);
-        uart_send_check(target, port);
-        uart_send_check(data, port);*/
-
-        prog = 1;
         addr = 8'b11111110;
+        port = 8'b00000000;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+        addr = 8'b11111110;
+        port = 8'b00000000;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+        addr = 8'b11111110;
+        port = 8'b00000000;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+        addr = 8'b11111110;
+        port = 8'b00000000;
+        uart_send_byte(addr);
+        uart_send_byte(port);
+        addr = 8'b11111100;
         port = 8'b10000000;
         uart_send_byte(addr);
         uart_send_byte(port);
 
         prog = 0;
-        target = addr;         
+        target = 8'b11100011;         
         data = 8'b11111111;
-        //uart_send_byte(target);
-        //uart_send_byte(data);
+        uart_send_byte(target);
+        uart_send_byte(data);
+        repeat(300) @(posedge clk);
+        target = 8'b11111110;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        repeat(300) @(posedge clk);
+        target = 8'b11111110;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        repeat(300) @(posedge clk);
+        target = 8'b11111110;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        repeat(300) @(posedge clk);
+        target = 8'b11111110;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        uart_send_byte(data);
+        repeat(300) @(posedge clk);
+        target = 8'b11111100;         
+        data = 8'b11111111;
+        uart_send_byte(target);
+        send_wrong_packet(data);
 
-        
+        repeat(1000)@(posedge clk);
 
         /*if(OK_bit == function_call * 11) begin
             test_result = TEST_PASSED;
