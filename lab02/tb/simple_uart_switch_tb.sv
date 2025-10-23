@@ -38,7 +38,7 @@ module top;
         COLOR_DEFAULT
     } print_color_t;
 
-    //`define DEBUG
+    `define DEBUG
     
     //------------------------------------------------------------------------------
     // Local variables
@@ -50,6 +50,8 @@ module top;
     bit                  sin;
     bit                  sout0;
     bit                  sout1;
+    byte                 addr, port, target, data;
+    bit                  err_packet;
     
     test_result_t        test_result = TEST_PASSED;
     logic                [21:0] data_out;
@@ -154,7 +156,6 @@ module top;
         bit parity;
         logic [11:0] addr_port;
         pkt_t newpkt;
-        bit err_packet;
         parity = 0;
         data_out[21:0] = 0;
         err_packet = 0;
@@ -395,6 +396,44 @@ module top;
             end 
         end 
     end 
+
+
+    covergroup cov_data @(posedge clk);
+        coverpoint addr {//max min values
+            bins max0 = {8'b11111111};
+            bins min0 = {8'b00000000};
+        }
+        coverpoint target {
+            bins max1 = {8'b11111111};
+            bins min1 = {8'b00000000};
+        }
+        coverpoint data {
+            bins max1 = {8'b11111111};
+            bins min1 = {8'b00000000};
+        }
+        coverpoint err_packet {
+            bins err = {1};
+            bins not_err = {0};
+        }
+        coverpoint sout1 {//output on both sout
+            bins signal0 = {0};
+            bins idle0 = {1};
+        }
+        coverpoint sout0 {
+            bins signal0 = {0};
+            bins idle0 = {1};
+        }
+        coverpoint sin {//input gets to sin
+            bins signal0 = {0};
+            bins idle0 = {1};
+        }
+        coverpoint prog {//prog is used and functional
+            bins progr = {0};
+            bins funct = {1};
+        }
+        endgroup
+        
+        cov_data cover_addr;
     
 
     
@@ -403,7 +442,7 @@ module top;
     // Tester main
 
     initial begin
-        byte addr, port, target, data;
+        cover_addr = new();
         sin = 1;
         rst_n = 0;
         repeat (16) @(posedge clk);
@@ -468,14 +507,13 @@ module top;
 
         repeat(1000)@(posedge clk);
 
-        /*if(OK_bit == function_call * 11) begin
-            test_result = TEST_PASSED;
-        end
-        else begin
-            test_result = TEST_FAILED;
-        end*/
+        `ifdef DEBUG
+        $display("Coverage: %0.2f%%", $get_coverage());
+        `endif
+
         print_test_result(test_result);
         $finish;
+
     end
 
     //------------------------------------------------------------------------------
