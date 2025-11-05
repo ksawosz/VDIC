@@ -24,6 +24,7 @@ initial begin
     bfm.uart_send_byte(8'hFF);
     repeat(1000) @(posedge bfm.clk);
     $display("Test sequence complete");
+    $finish;
 end
 
 endmodule : switch_tbgen

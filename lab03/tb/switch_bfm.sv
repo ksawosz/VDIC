@@ -21,7 +21,6 @@ initial begin
         #10;
         clk = ~clk;
     end
-    $display("aaaaa");
 end
 
 task uart_send_byte(input byte data);
