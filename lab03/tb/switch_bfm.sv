@@ -24,7 +24,8 @@ initial begin
 end
 
 task uart_send_byte(input byte data);
-    int i; bit parity;
+    int i; 
+    bit parity;
     sin = 0; repeat (16) @(posedge clk);
     parity = 0;
     for (i = 7; i >= 0; i--) begin
@@ -37,7 +38,8 @@ task uart_send_byte(input byte data);
 endtask
 
 task send_wrong_packet(input byte data);
-    int i; bit parity;
+    int i; 
+    bit parity;
     sin = 0; repeat (16) @(posedge clk);
     parity = 0;
     for (i = 7; i >= 0; i--) begin

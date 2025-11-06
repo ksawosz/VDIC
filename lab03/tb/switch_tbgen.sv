@@ -13,15 +13,23 @@ function byte get_data();
 endfunction : get_data
 
 initial begin
-    bfm.rst_n = 0; 
+    bfm.rst_n = 0;
+    bfm.sin = 1; 
     repeat(16) @(posedge bfm.clk); 
     bfm.rst_n = 1;
+    repeat(16) @(posedge bfm.clk); 
     bfm.prog = 1;
     bfm.uart_send_byte(8'hFF);
+    bfm.uart_send_byte(8'h00);
+    bfm.uart_send_byte(8'h00);
     bfm.uart_send_byte(8'h80);
     bfm.prog = 0;
+    bfm.uart_send_byte(8'h00);
     bfm.uart_send_byte(8'hFF);
     bfm.uart_send_byte(8'hFF);
+    bfm.uart_send_byte(8'h00);
+    bfm.uart_send_byte(8'h00);
+    bfm.send_wrong_packet(8'h00);
     repeat(1000) @(posedge bfm.clk);
     $display("Test sequence complete");
     $finish;

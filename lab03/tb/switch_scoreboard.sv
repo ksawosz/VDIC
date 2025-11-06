@@ -19,10 +19,12 @@ typedef enum {
     COLOR_DEFAULT
 } print_color;
 
-typedef struct {
-    logic [10:0] addr;
+typedef struct{
+    logic [7:0] addr;
     bit port;
 } addr_map_t;
+
+//`define DEBUG
 
 //------------------------------------------------------------------------------
 // local variables
@@ -33,7 +35,6 @@ test_result   tr             = TEST_PASSED; // the result of the current test
 addr_map_t prog_table[$];
 pkt_t pkt;
 pkt_t data_queue[$];
-bit expected_port;
 bit packet_end;
 logic [21:0] data_out;
 
@@ -54,7 +55,7 @@ initial begin
             parity = 0;
             repeat (8) @(posedge bfm.clk);
             `ifdef DEBUG
-            $display("1 err = ", err_packet);
+            $display("1 err = ", bfm.err_packet);
             `endif
             if(bfm.sin == 0) begin
                 if(!k) begin
@@ -68,7 +69,7 @@ initial begin
                 bfm.err_packet = 1;
             end
             `ifdef DEBUG
-            $display("2 err = ", err_packet);
+            $display("2 err = ", bfm.err_packet);
             `endif
 
             for(i = 0; i < 8; i++) begin
@@ -96,7 +97,7 @@ initial begin
                 bfm.err_packet = 1;
             end
             `ifdef DEBUG
-            $display("3 err = ", err_packet);
+            $display("3 err = ", bfm.err_packet);
             `endif
 
             repeat (16) @(posedge bfm.clk);
@@ -112,7 +113,7 @@ initial begin
                 bfm.err_packet = 1;
             end
             `ifdef DEBUG
-            $display("4 err = ", err_packet);
+            $display("4 err = ", bfm.err_packet);
             `endif
 
             repeat (8) @(posedge bfm.clk);
@@ -122,8 +123,7 @@ initial begin
             newpkt.port    = data_out[12];       
             newpkt.is_prog = bfm.prog;               
             newpkt.is_err  = bfm.err_packet;
-            data_queue.push_back(newpkt);        
-            
+            data_queue.push_back(newpkt);             
 
         packet_end = 1;
     end
@@ -136,7 +136,7 @@ initial begin
         // you can deassert it here if desired
         packet_end = 0;
 
-        for (int i = 0; i < data_queue.size(); i++) begin
+        for (int i = 0; i < data_queue.size()-1-i; i++) begin
             pkt = data_queue[i];
 
             if (pkt.is_prog) begin

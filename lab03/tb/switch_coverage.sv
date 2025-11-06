@@ -1,48 +1,49 @@
 module switch_coverage(switch_bfm bfm);
 import switch_tb_pkg::*;
 
-bit                  prog;
-bit                  sin;
-bit                  sout0;
-bit                  sout1;
-byte                 addr, port, target, data;
-bit                  err_packet;
-
 covergroup cov_data @(posedge bfm.clk);
-coverpoint addr {
+coverpoint bfm.addr {
     bins max0 = {8'b11111111};
     bins min0 = {8'b00000000};
 }
-coverpoint target {
+coverpoint bfm.target {
     bins max1 = {8'b11111111};
     bins min1 = {8'b00000000};
 }
-coverpoint data {
+coverpoint bfm.data {
     bins max1 = {8'b11111111};
     bins min1 = {8'b00000000};
 }
-coverpoint err_packet {
+coverpoint bfm.err_packet {
     bins err = {1};
     bins not_err = {0};
 }
-coverpoint sout1 {
+coverpoint bfm.sout1 {
     bins signal0 = {0};
     bins idle0 = {1};
 }
-coverpoint sout0 {
+coverpoint bfm.sout0 {
     bins signal0 = {0};
     bins idle0 = {1};
 }
-coverpoint sin {
+coverpoint bfm.sin {
     bins signal0 = {0};
     bins idle0 = {1};
 }
-coverpoint prog {
+coverpoint bfm.prog {
     bins progr = {0};
     bins funct = {1};
 }
 endgroup
 
 cov_data cover_addr;
+
+initial begin : coverage_block
+    cover_addr      = new();
+    forever begin : sampling_block
+        @(posedge bfm.clk);
+        cover_addr.sample();
+    end : sampling_block
+end : coverage_block
 
 endmodule : switch_coverage
