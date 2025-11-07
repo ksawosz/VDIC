@@ -1,6 +1,7 @@
 module switch_tbgen(switch_bfm bfm);
 import switch_tb_pkg::*;
 
+
 function byte get_data();
     bit [1:0] zero_ones;
     zero_ones = 2'($random);
@@ -14,7 +15,7 @@ endfunction : get_data
 
 initial begin
     bfm.rst_n = 0;
-    bfm.sin = 1; 
+    bfm.sin = 1;
     repeat(16) @(posedge bfm.clk); 
     bfm.rst_n = 1;
     repeat(16) @(posedge bfm.clk); 
@@ -28,11 +29,21 @@ initial begin
     bfm.uart_send_byte(8'hFF);
     bfm.uart_send_byte(8'hFF);
     bfm.uart_send_byte(8'h00);
+    bfm.uart_send_byte(8'h01);
+    bfm.send_wrong_packet(8'h00);
     bfm.uart_send_byte(8'h00);
     bfm.send_wrong_packet(8'h00);
+    bfm.rst_n = 0;
+    bfm.prog = 1;
+    bfm.uart_send_byte(8'hF1);
+    bfm.uart_send_byte(8'h00);
+    bfm.prog = 0;
+    bfm.uart_send_byte(8'hF1);
+    bfm.uart_send_byte(8'hFF);
     repeat(1000) @(posedge bfm.clk);
     $display("Test sequence complete");
     $finish;
+
 end
 
 endmodule : switch_tbgen

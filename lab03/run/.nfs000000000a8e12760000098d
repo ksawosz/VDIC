@@ -1,0 +1,37 @@
+[INFO ] 2025-11-06 22:10:28 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 33021
+[INFO ] 2025-11-06 22:10:33 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 44186
+[INFO ] 2025-11-06 22:12:04 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 40889
+[INFO ] 2025-11-06 22:12:09 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 36289
+[INFO ] 2025-11-06 22:17:27 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 35716
+[INFO ] 2025-11-06 22:17:32 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 34828
+[INFO ] 2025-11-06 22:24:43 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 46667
+[INFO ] 2025-11-06 22:24:48 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 45481
+[INFO ] 2025-11-06 22:32:08 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 44009
+[INFO ] 2025-11-06 22:32:13 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 43790
+[INFO ] 2025-11-06 23:50:10 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 38590
+[ERROR] 2025-11-06 23:50:10 [com.cadence.mdv.messaging.MDVASynchronicMessaging] [frontend-pool-1] - Directory 'cov_work/scope/lab03example' not found. Verify the existence of the specified directory, and rerun the command
+[ERROR] 2025-11-06 23:52:58 [com.cadence.mdv.cli.app.MDVCLIApp] [CLI Engine Input Reader] - Error during batch mode launch
+java.io.IOException: Input/output error
+	at java.base/java.io.FileInputStream.read0(Native Method)
+	at java.base/java.io.FileInputStream.read(Unknown Source)
+	at jline.internal.NonBlockingInputStream.read(NonBlockingInputStream.java:169)
+	at jline.internal.NonBlockingInputStream.read(NonBlockingInputStream.java:137)
+	at jline.internal.NonBlockingInputStream.read(NonBlockingInputStream.java:246)
+	at jline.internal.InputStreamReader.read(InputStreamReader.java:261)
+	at jline.internal.InputStreamReader.read(InputStreamReader.java:198)
+	at jline.console.ConsoleReader.readCharacter(ConsoleReader.java:2145)
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2349)
+	at jline.console.ConsoleReader.readLine(ConsoleReader.java:2269)
+	at com.cadence.mdv.cli.app.MDVCLIApp$ConsoleCLIReader.readLine(MDVCLIApp.java:54)
+	at com.cadence.mdv.cli.app.MDVCLIApp$1.run(MDVCLIApp.java:222)
+	at java.base/java.lang.Thread.run(Unknown Source)
+[INFO ] 2025-11-07 00:04:28 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 35767
+[ERROR] 2025-11-07 00:04:28 [com.cadence.mdv.messaging.MDVASynchronicMessaging] [frontend-pool-1] - Directory 'cov_work/scope/lab03example' not found. Verify the existence of the specified directory, and rerun the command
+[INFO ] 2025-11-07 00:09:21 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 44757
+[INFO ] 2025-11-07 00:09:26 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 42570
+[INFO ] 2025-11-07 00:10:40 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 33521
+[INFO ] 2025-11-07 00:10:46 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 44804
+[INFO ] 2025-11-07 00:13:59 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 42794
+[INFO ] 2025-11-07 00:14:04 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 43730
+[INFO ] 2025-11-07 00:16:07 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 42850
+[INFO ] 2025-11-07 00:16:12 [com.cadence.mdv.imc.Main] [main] - Binding debug tools http on port: 36165

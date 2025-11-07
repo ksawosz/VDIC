@@ -133,7 +133,6 @@ initial begin
     tr = TEST_PASSED;
     forever begin
         wait (packet_end == 1);
-        // you can deassert it here if desired
         packet_end = 0;
 
         for (int i = 0; i < data_queue.size()-1-i; i++) begin
@@ -151,7 +150,6 @@ initial begin
                 int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
                 if (idx.size() == 0) begin
                     $display("Unknown address %0d at time %0t", pkt.addr, $time);
-                    //tr = TEST_FAILED;
                 end
             end
         end
