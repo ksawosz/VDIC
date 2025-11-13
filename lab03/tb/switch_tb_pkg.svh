@@ -1,9 +1,4 @@
 package switch_tb_pkg;
-
-    typedef enum bit {
-        TEST_PASSED,
-        TEST_FAILED
-    } test_result_t;
   
     typedef struct packed {
         logic [7:0] addr;

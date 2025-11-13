@@ -1,0 +1,11 @@
+//
+// File created by:  xrun
+// Do not modify this file
+//
+/home/student/ksawosz/VDIC/common/simple_uart_switch.sv
+/home/student/ksawosz/VDIC/lab03/tb/switch_tb_pkg.svh
+/home/student/ksawosz/VDIC/lab03/tb/switch_bfm.sv
+/home/student/ksawosz/VDIC/lab03/tb/switch_tbgen.sv
+/home/student/ksawosz/VDIC/lab03/tb/switch_coverage.sv
+/home/student/ksawosz/VDIC/lab03/tb/switch_scoreboard.sv
+/home/student/ksawosz/VDIC/lab03/tb/simple_uart_switch_tb.sv

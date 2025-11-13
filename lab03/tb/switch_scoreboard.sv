@@ -135,7 +135,7 @@ initial begin
         wait (packet_end == 1);
         packet_end = 0;
 
-        for (int i = 0; i < data_queue.size()-1-i; i++) begin
+        for (int i = 0; i < data_queue.size(); i++) begin
             pkt = data_queue[i];
 
             if (pkt.is_prog) begin
@@ -143,13 +143,15 @@ initial begin
                 if (idx.size() == 0) begin
                     addr_map_t new_entry = '{pkt.addr, pkt.port};
                     prog_table.push_back(new_entry);
-                end else begin
+                end 
+                else begin
                     prog_table[idx[0]].port = pkt.port;
                 end
-            end else begin
+            end 
+            else begin
                 int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
                 if (idx.size() == 0) begin
-                    $display("Unknown address %0d at time %0t", pkt.addr, $time);
+                    $display("Unknown address %0h at time %0t", pkt.addr, $time);
                 end
             end
         end

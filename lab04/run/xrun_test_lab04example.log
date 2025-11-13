@@ -1,0 +1,95 @@
+TOOL:	xrun(64)	24.09-s005: Started on Nov 13, 2025 at 23:52:49 CET
+xrun
+	-F ../tb/tb.f
+		../../common/simple_uart_switch.sv
+		switch_tb_pkg.svh
+		switch_bfm.sv
+		top.sv
+		+incdir+tb_classes
+		+incdir+.
+		+nowarn+DSEMEL
+		-timescale 1ns/1ps
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	+nowarnCOVUTA
+	+nowarnBADPRF
+	+nowarnXCLGNOPTM
+	+nowarnRNDXCELON
+	+nowarnSAWSTP
+	-xmlibdirname INCA_libs
+	+overwrite
+	-nocopyright
+	-coverage all
+	-covoverwrite
+	-covfile xrun_covfile.txt
+	+UVM_TESTNAME=lab04example
+	-l xrun_test_lab04example.log
+Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.1d
+file: ../tb/switch_tb_pkg.svh
+            cov_data.sample();
+                          |
+xmvlog: *W,ECSSDM (../tb/tb_classes/coverage.svh,48|26): The 'sample' method is called upon a covergroup instance whose declaration has a default sampling condition associated with it.
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		switch_tb_pkg
+		top
+
+	Extracting FSMs for coverage:
+		worklib.top
+	Total FSMs extracted = 0
+	Building instance overlay tables: .................... Done
+	Enabling instrumentation for coverage types: block expression FSM toggle functional
+	Building instance specific data structures.
+	Performing constant object marking (COM) analysis.
+xmelab: *W,OBINVE: (File: ../tb/tb_classes/coverage.svh, Line : 6): Bin value '255' of bin 'worklib.switch_tb_pkg::coverage::\cov_data .bfm_addr.max0' is not within the possible values that coverpoint can store and will be ignored.
+xmelab: *W,OBINVE: (File: ../tb/tb_classes/coverage.svh, Line : 10): Bin value '255' of bin 'worklib.switch_tb_pkg::coverage::\cov_data .bfm_target.max1' is not within the possible values that coverpoint can store and will be ignored.
+xmelab: *W,OBINVE: (File: ../tb/tb_classes/coverage.svh, Line : 14): Bin value '255' of bin 'worklib.switch_tb_pkg::coverage::\cov_data .bfm_data.max1' is not within the possible values that coverpoint can store and will be ignored.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                     Instances  Unique
+		Modules:                     2       2
+		Interfaces:                  1       1
+		Verilog packages:            1       1
+		Registers:                  78      92
+		Scalar wires:               10       -
+		Always blocks:               3       3
+		Initial blocks:              2       2
+		Parallel blocks:             2       2
+		Cont. assignments:           1       2
+		Pseudo assignments:          6       -
+		Covergroup Instances:        0       1
+		SV Class declarations:       4       4
+		SV Class specializations:    4       4
+		Simulation timescale:      1ps
+	Writing initial simulation snapshot: worklib.top:sv
+Loading snapshot worklib.top:sv .................... Done
+xcelium> source /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/xcelium/files/xmsimrc
+xcelium> source /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.1d/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> run
+[SB] Added new mapping: addr=ff -> port=0
+[SB] ERR: DUT received wrong packet: addr=1 port=0
+[SB] ERR: DUT
+[SB] ERR: Port mismatch for addr ff: expected=0 got=1
+Test sequence complete
+[1;30m[101m-----------------------------------
+----------- Test FAILED -----------
+-----------------------------------[0m
+
+Simulation complete via $finish(1) at time 49430 NS + 0
+../tb/top.sv:39         $finish;
+xcelium> exit
+See ./cov_work/scope/test/icc.com file for message(s) on coverage constant object marking
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  top(top)
+  scope    :  scope
+  testname :  test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_2ab38138_1d3a9f66.ucm
+  data               :  ./cov_work/scope/test/icc_2ab38138_1d3a9f66.ucd
+TOOL:	xrun(64)	24.09-s005: Exiting on Nov 13, 2025 at 23:52:51 CET  (total: 00:00:02)

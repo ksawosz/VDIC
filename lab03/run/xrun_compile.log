@@ -1,0 +1,61 @@
+TOOL:	xrun(64)	24.09-s005: Started on Nov 07, 2025 at 13:12:00 CET
+xrun
+	-compile
+	-l xrun_compile.log
+	-F ../tb/tb.f
+		../../common/simple_uart_switch.sv
+		switch_tb_pkg.svh
+		switch_bfm.sv
+		switch_tbgen.sv
+		switch_coverage.sv
+		switch_scoreboard.sv
+		simple_uart_switch_tb.sv
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	+nowarnCOVUTA
+	+nowarnBADPRF
+	+nowarnXCLGNOPTM
+	+nowarnRNDXCELON
+	+nowarnSAWSTP
+	-xmlibdirname INCA_libs
+	+overwrite
+	-nocopyright
+	-coverage all
+	-covoverwrite
+	-covfile xrun_covfile.txt
+file: ../tb/../../common/simple_uart_switch.sv
+	module worklib.simple_switch_uart:sv
+		errors: 0, warnings: 0
+file: ../tb/switch_tb_pkg.svh
+	package worklib.switch_tb_pkg:svh
+		errors: 0, warnings: 0
+file: ../tb/switch_bfm.sv
+	interface worklib.switch_bfm:sv
+		errors: 0, warnings: 0
+file: ../tb/switch_tbgen.sv
+	module worklib.switch_tbgen:sv
+		errors: 0, warnings: 0
+file: ../tb/switch_coverage.sv
+        cover_addr.sample();
+                        |
+xmvlog: *W,ECSSDM (../tb/switch_coverage.sv,45|24): The 'sample' method is called upon a covergroup instance whose declaration has a default sampling condition associated with it.
+	module worklib.switch_coverage:sv
+		errors: 0, warnings: 1
+file: ../tb/switch_scoreboard.sv
+                int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
+                           |
+xmvlog: *W,VARIST (../tb/switch_scoreboard.sv,142|27): Local static variable with initializer requires 'static' keyword.
+                    addr_map_t new_entry = '{pkt.addr, pkt.port};
+                                         |
+xmvlog: *W,VARIST (../tb/switch_scoreboard.sv,144|41): Local static variable with initializer requires 'static' keyword.
+                int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
+                           |
+xmvlog: *W,VARIST (../tb/switch_scoreboard.sv,152|27): Local static variable with initializer requires 'static' keyword.
+	module worklib.switch_scoreboard:sv
+		errors: 0, warnings: 3
+file: ../tb/simple_uart_switch_tb.sv
+	module worklib.top:sv
+		errors: 0, warnings: 0
+TOOL:	xrun(64)	24.09-s005: Exiting on Nov 07, 2025 at 13:12:00 CET  (total: 00:00:00)
