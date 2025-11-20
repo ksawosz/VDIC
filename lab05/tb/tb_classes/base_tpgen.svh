@@ -47,6 +47,8 @@ virtual class base_tpgen extends uvm_component;
     // run phase
     //------------------------------------------------------------------------------
         task run_phase(uvm_phase phase);
+
+            phase.raise_objection(this);
         
             bfm.rst_n = 0;
             bfm.sin = 1;
@@ -66,6 +68,7 @@ virtual class base_tpgen extends uvm_component;
             repeat(1) @(posedge bfm.clk); 
             bfm.uart_send_byte(8'hFF);
             bfm.uart_send_byte(8'h00);
+            repeat(1) @(posedge bfm.clk);
             bfm.uart_send_byte(8'h00);
             bfm.send_wrong_packet(8'h00);
             bfm.rst_n = 0;
@@ -78,7 +81,7 @@ virtual class base_tpgen extends uvm_component;
             repeat(1000) @(posedge bfm.clk);
             $display("Test sequence complete");
 
-            phase.raise_objection(this);
+            phase.drop_objection(this);
     
     
         endtask : run_phase
