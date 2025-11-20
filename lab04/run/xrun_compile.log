@@ -1,0 +1,45 @@
+TOOL:	xrun(64)	24.09-s005: Started on Nov 14, 2025 at 13:40:15 CET
+xrun
+	-compile
+	-l xrun_compile.log
+	-F ../tb/tb.f
+		../../common/simple_uart_switch.sv
+		switch_tb_pkg.svh
+		switch_bfm.sv
+		top.sv
+		+incdir+tb_classes
+		+incdir+.
+		+nowarn+DSEMEL
+		-timescale 1ns/1ps
+	-v93
+	+nowarnDSEM2009
+	+nowarnDSEMEL
+	+nowarnCGDEFN
+	+nowarnCOVUTA
+	+nowarnBADPRF
+	+nowarnXCLGNOPTM
+	+nowarnRNDXCELON
+	+nowarnSAWSTP
+	-xmlibdirname INCA_libs
+	+overwrite
+	-nocopyright
+	-coverage all
+	-covoverwrite
+	-covfile xrun_covfile.txt
+xrun: *W,TIMESCALE: The -timescale option specified with -compile is unused.
+file: ../tb/../../common/simple_uart_switch.sv
+	module worklib.simple_switch_uart:sv
+		errors: 0, warnings: 0
+file: ../tb/switch_tb_pkg.svh
+            cov_data.sample();
+                          |
+xmvlog: *W,ECSSDM (../tb/tb_classes/coverage.svh,48|26): The 'sample' method is called upon a covergroup instance whose declaration has a default sampling condition associated with it.
+	package worklib.switch_tb_pkg:svh
+		errors: 0, warnings: 1
+file: ../tb/switch_bfm.sv
+	interface worklib.switch_bfm:sv
+		errors: 0, warnings: 0
+file: ../tb/top.sv
+	module worklib.top:sv
+		errors: 0, warnings: 0
+TOOL:	xrun(64)	24.09-s005: Exiting on Nov 14, 2025 at 13:40:16 CET  (total: 00:00:01)

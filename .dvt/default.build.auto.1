@@ -1,21 +1,94 @@
 ################################################################################
 #                    DO NOT MANUALLY EDIT THIS FILE!                           #
 ################################################################################
-# This file contains the automatically generated build configuration (2025/11/13 21:38:18)
+# This file contains the automatically generated build configuration (2025/11/20 20:38:22)
 # requested at line 3 in /home/student/ksawosz/VDIC/.dvt/default.build
 
 
 ################ Verilog Auto-config Directives ################
 +dvt_init
 
-+incdir+lab04example/tb/tb_classes
+-uvm
+
+### AUTOCONFIG WARNING: Multiple incdir candidates.
+# The following includes have multiple incdir candidates:
+#`include "tpgen.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04/tb/switch_tb_pkg.svh)
+#`include "testbench.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04/tb/switch_tb_pkg.svh)
+#`include "tpgen.svh" in tinyalu_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04example/tb/tinyalu_tb_pkg.svh)
+#`include "testbench.svh" in tinyalu_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04example/tb/tinyalu_tb_pkg.svh)
+# The list of incdir candidates is:
++incdir+lab04/tb/tb_classes
+# +incdir+lab04example/tb/tb_classes
+
+### AUTOCONFIG WARNING: Multiple incdir candidates.
+# The following includes have multiple incdir candidates:
+#`include "switch_macros.svh" in top.sv (/home/student/ksawosz/VDIC/lab04/tb/top.sv)
+#`include "switch_macros.svh" in top.sv (/home/student/ksawosz/VDIC/lab05/tb/top.sv)
+# The list of incdir candidates is:
++incdir+lab04/tb
+# +incdir+lab05/tb
+
+### AUTOCONFIG WARNING: Multiple incdir candidates.
+# The following includes have multiple incdir candidates:
+#`include "coverage.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04/tb/switch_tb_pkg.svh)
+#`include "scoreboard.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04/tb/switch_tb_pkg.svh)
+#`include "coverage.svh" in tinyalu_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04example/tb/tinyalu_tb_pkg.svh)
+#`include "scoreboard.svh" in tinyalu_tb_pkg.svh (/home/student/ksawosz/VDIC/lab04example/tb/tinyalu_tb_pkg.svh)
+#`include "coverage.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "scoreboard.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "coverage.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "scoreboard.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+# The list of incdir candidates is:
++incdir+lab04/tb/tb_classes
+# +incdir+lab04example/tb/tb_classes
+# +incdir+lab05/tb/tb_classes
+# +incdir+lab05example/tb/tb_classes
+
+### AUTOCONFIG WARNING: Multiple incdir candidates.
+# The following includes have multiple incdir candidates:
+#`include "base_tpgen.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "random_tpgen.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "add_tpgen.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "env.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "random_test.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "add_test.svh" in switch_tb_pkg.svh (/home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh)
+#`include "base_tpgen.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "random_tpgen.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "add_tpgen.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "env.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "random_test.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+#`include "add_test.svh" in tinyalu_tb_pkg.sv (/home/student/ksawosz/VDIC/lab05example/tb/tinyalu_tb_pkg.sv)
+# The list of incdir candidates is:
++incdir+lab05/tb/tb_classes
+# +incdir+lab05example/tb/tb_classes
+
+### AUTOCONFIG WARNING: Multiple incdir candidates.
+# The following includes have multiple incdir candidates:
+#`include "tinyalu_macros.svh" in top.sv (/home/student/ksawosz/VDIC/lab04example/tb/top.sv)
+#`include "tinyalu_macros.svh" in top.sv (/home/student/ksawosz/VDIC/lab05example/tb/top.sv)
+# The list of incdir candidates is:
 +incdir+lab04example/tb
+# +incdir+lab05example/tb
 
 # Available `ifdef / `ifndef controls:
 # +define+DEBUG
 
+lab05/tb/switch_tb_pkg.svh
+lab05example/tb/tinyalu_tb_pkg.sv
+lab05/tb/tb_classes/scoreboard.svh
+lab05example/tb/tb_classes/scoreboard.svh
+lab05/tb/tb_classes/coverage.svh
+lab05example/tb/tb_classes/add_test.svh
+lab05example/tb/tb_classes/add_tpgen.svh
+lab05example/tb/tb_classes/coverage.svh
+lab05example/tb/tb_classes/env.svh
+lab05example/tb/tb_classes/random_test.svh
+lab05example/tb/tb_classes/random_tpgen.svh
 lab01example/tb/tinyalu_tb.sv
 lab02example/tb/tinyalu_tb.sv
+lab04example/tb/tb_classes/scoreboard.svh
+lab04example/tb/tb_classes/tpgen.svh
+lab04/tb/switch_tb_pkg.svh
 lab04example/tb/tinyalu_tb_pkg.svh
 lab02/tb/simple_uart_switch_tb.sv
 common/simple_uart_switch.sv
@@ -23,26 +96,32 @@ common/tinyalu/three_cycle.sv
 lab01/tb/simple_uart_switch_tb.sv
 lab03/tb/simple_uart_switch_tb.sv
 lab03example/tb/top.sv
-lab04/tb/simple_uart_switch_tb.sv
+lab04_part1/tb/lab04part1.sv
+lab04example/tb/tb_classes/coverage.svh
+lab04example/tb/tb_classes/testbench.svh
+lab05/tb/switch_macros.svh
+lab05example/tb/tb_classes/base_tpgen.svh
+lab05example/tb/tinyalu_macros.svh
 common/tinyalu/tinyalu_pkg.sv
+lab05example/tb/top.sv
 common/tinyalu/tinyalu.sv
 common/tinyalu/single_cycle.sv
 lab03/tb/switch_tb_pkg.svh
+lab05/tb/top.sv
+lab05/tb/switch_bfm.sv
+lab04/tb/top.sv
+lab04/tb/switch_bfm.sv
+lab03/tb/switch_tbgen.sv
+lab03/tb/switch_scoreboard.sv
+lab03/tb/switch_coverage.sv
+lab03/tb/switch_bfm.sv
 lab03example/tb/tinyalu_tb_pkg.svh
+lab05example/tb/tinyalu_bfm.sv
 lab04example/tb/top.sv
 lab04example/tb/tinyalu_bfm.sv
 lab03example/tb/tpgen.sv
 lab03example/tb/tinyalu_bfm.sv
 lab03example/tb/scoreboard.sv
 lab03example/tb/coverage.sv
-lab04/tb/switch_tb_pkg.svh
-lab04/tb/switch_tbgen.sv
-lab04/tb/switch_scoreboard.sv
-lab04/tb/switch_coverage.sv
-lab04/tb/switch_bfm.sv
-lab03/tb/switch_tbgen.sv
-lab03/tb/switch_scoreboard.sv
-lab03/tb/switch_coverage.sv
-lab03/tb/switch_bfm.sv
 
 ################ No files found. ################

@@ -151,9 +151,6 @@ class scoreboard;
             for (int i = 0; i < data_queue.size(); i++) begin
                 pkt_t pkt = data_queue[i];
 
-                //------------------------------------------------------
-                // WRONG PACKET CHECKING
-                //------------------------------------------------------
                 if (pkt.is_err) begin
                     `ifdef DEBUG
                     $display("[SB] ERR: DUT received wrong packet: addr=%0h port=%0b",
@@ -165,9 +162,6 @@ class scoreboard;
                     continue;
                 end
 
-                //------------------------------------------------------
-                // PROGRAMMING PACKET
-                //------------------------------------------------------
                 if (pkt.is_prog) begin
                     int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
 

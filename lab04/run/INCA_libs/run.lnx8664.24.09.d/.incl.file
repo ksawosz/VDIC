@@ -1,0 +1,6 @@
+./coverage.svh
+./tpgen.svh
+./scoreboard.svh
+./testbench.svh
+./switch_macros.svh
+../tb/tb_classes/switch_macros.svh
