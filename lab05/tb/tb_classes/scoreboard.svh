@@ -19,9 +19,22 @@ class scoreboard extends uvm_component;
     } print_color;
 
     protected typedef struct packed{
-        logic [7:0] addr;
+        logic [0:10] addr;
+        logic [0:10] data;
+        bit prog;
+    } read_sin;
+
+    protected typedef struct packed{
+        logic [0:10] addr;
+        logic [0:10] data;
         bit port;
-    } addr_map_t;
+    } read_sout;
+
+    protected typedef struct packed{
+        logic [0:10] addr;
+        logic [0:10] data;
+        bit port;
+    } check_sin;
 
     //`define DEBUG
 
@@ -32,7 +45,10 @@ class scoreboard extends uvm_component;
     protected virtual switch_bfm bfm;
     protected test_result tr = TEST_PASSED; // the result of the current test
 
-    protected addr_map_t prog_table[$];
+    protected read_sin in_sin[$];
+    protected read_sout out_sout[$];
+    protected check_sin check_sin1[$];
+    protected read_sout check_sin0[$];
     pkt_t pkt;
     pkt_t data_queue[$];
     logic packet_end;
@@ -48,161 +64,123 @@ class scoreboard extends uvm_component;
     //------------------------------------------------------------------------------
     // local tasks
     //------------------------------------------------------------------------------
-    protected task store_packet();
+    protected task queue_sin();
         int i;
-        bit parity;
-        logic [11:0] addr_port;
-        pkt_t newpkt;
-        parity = 0;
-        data_out[21:0] = 0;
-        bfm.err_packet = 0;
-
+        int j;
+        read_sin temp;
         forever begin
             @(negedge bfm.sin);
-            newpkt.is_prog = bfm.prog;
-            bfm.err_packet = 0;
-            data_out[21:0] = 0;
-            bfm.err_packet = 0;
-
-            for(int k = 0; k < 2; k++) begin
-                parity = 0;
-                repeat (8) @(posedge bfm.clk);
-                `ifdef DEBUG
-                $display("1 err = ", bfm.err_packet);
-                `endif
-                if(bfm.sin == 0) begin
-                    if(!k) begin
-                        data_out[10] = bfm.sin;
-                    end
-                    else begin
-                        data_out[21] = bfm.sin;
-                    end
-                end
-                else begin
-                    bfm.err_packet = 1;
-                end
-                `ifdef DEBUG
-                $display("2 err = ", bfm.err_packet);
-                `endif
-
-                for(i = 9; i > 1; i--) begin
-                    repeat (16) @(posedge bfm.clk);
-                    if(!k) begin
-                        data_out[i] = bfm.sin;
-                        parity ^= data_out[i];
-                    end
-                    else begin
-                        data_out[i+11] = bfm.sin;
-                        parity ^= data_out[i+11];
-                    end
-                end
-
+            repeat (8) @(posedge bfm.clk);
+            for(i=0; i<=10; i++) begin
+                temp.addr[i] = bfm.sin;
                 repeat (16) @(posedge bfm.clk);
-                if(bfm.sin == parity) begin
-                    if(!k) begin
-                        data_out[1] = bfm.sin;
-                    end
-                    else begin
-                        data_out[12] = bfm.sin;
-                    end
-                end
-                else begin
-                    bfm.err_packet = 1;
-                end
-                `ifdef DEBUG
-                $display("3 err = ", bfm.err_packet);
-                `endif
-
-                repeat (16) @(posedge bfm.clk);
-                if(bfm.sin == 1) begin
-                    if(!k) begin
-                        data_out[0] = bfm.sin;
-                    end
-                    else begin
-                        data_out[11] = bfm.sin;
-                    end
-                end
-                else begin
-                    bfm.err_packet = 1;
-                end
-                `ifdef DEBUG
-                $display("4 err = ", bfm.err_packet);
-                `endif
-
-                repeat (8) @(posedge bfm.clk);
             end
 
-            newpkt.addr    = data_out[9:2];
-            newpkt.port    = data_out[20];
-            newpkt.is_err  = bfm.err_packet;
-            data_queue.push_back(newpkt);
+            for(j=0; j<=9; j++) begin
+                temp.data[j] = bfm.sin;
+                repeat (16) @(posedge bfm.clk);
+            end
 
+            temp.data[10] = bfm.sin;
 
-            packet_end = 1;
+            if(bfm.prog == 1) begin
+                temp.prog = 1;
+            end
+            else begin
+                temp.prog = 0;
+            end
+
+            in_sin.push_back(temp);
         end
     endtask
 
-    protected task compare_output();
-        bit expected_port;
-
+    protected task queue_sout();
+        int i, j, k, l;
+        read_sout temp;
         forever begin
-            wait (packet_end == 1);
-            packet_end = 0;
-
-            for (int i = 0; i < data_queue.size(); i++) begin
-                pkt_t pkt = data_queue[i];
-
-                if (pkt.is_err) begin
-                    `ifdef DEBUG
-                    $display("[SB] ERR: DUT received wrong packet: addr=%0h port=%0b",
-                        pkt.addr, pkt.port);
-                    `endif
-                    if(bfm.sout0 == 0 || bfm.sout1 == 0) begin
-                        tr = TEST_FAILED;
-                    end
-                    continue;
+            @(negedge bfm.sout0 or negedge bfm.sout1);
+            repeat (8) @(posedge bfm.clk);
+            if(bfm.sout0 == 0) begin
+                for(i=0; i<=10; i++) begin
+                    temp.addr[i] = bfm.sout0;
+                    repeat (16) @(posedge bfm.clk);
                 end
 
-                if (pkt.is_prog) begin
-                    int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
-
-                    if (idx.size() == 0) begin
-                        addr_map_t entry = '{pkt.addr, pkt.port};
-                        prog_table.push_back(entry);
-                        `ifdef DEBUG
-                        $display("[SB] Added new mapping: addr=%0h -> port=%0b",
-                            pkt.addr, pkt.port);
-                        `endif
-                    end else begin
-                        prog_table[idx[0]].port = pkt.port;
-                        `ifdef DEBUG
-                        $display("[SB] Updated mapping: addr=%0h -> port=%0b",
-                            pkt.addr, pkt.port);
-                        `endif
-                    end
+                for(j=0; j<=9; j++) begin
+                    temp.data[j] = bfm.sout0;
+                    repeat (16) @(posedge bfm.clk);
                 end
-                else begin
-                    int idx[$] = prog_table.find_index with (item.addr == pkt.addr);
 
-                    if (idx.size() == 0) begin
-                        $display("[SB] prog=0 ERR: Unknown address %0h (not programmed!)", pkt.addr);
-                        continue;
-                    end
+                temp.data[10] = bfm.sout0;
 
-                    expected_port = prog_table[idx[0]].port;
-
-                    if (expected_port !== pkt.port) begin
-                        `ifdef DEBUG
-                        $display("[SB] ERR: Port mismatch for addr %0h: expected=%0b got=%0b",
-                            pkt.addr, expected_port, pkt.port);
-                        `endif
-                        tr = TEST_FAILED;
-                    end
+                temp.port = 0;
+            end
+            else begin
+                for(k=0; k<=10; k++) begin
+                    temp.addr[k] = bfm.sout1;
+                    repeat (16) @(posedge bfm.clk);
                 end
+
+                for(l=0; l<=9; l++) begin
+                    temp.data[l] = bfm.sout1;
+                    repeat (16) @(posedge bfm.clk);
+                end
+
+                temp.data[10] = bfm.sout1;
+
+                temp.port = 1;
             end
 
-            // clear queue after processing
-            data_queue.delete();
+            out_sout.push_back(temp);
+        end
+    endtask
+
+    protected task sin_checking();
+        int x[$];
+        check_sin temp1;
+        read_sout temp2;
+        read_sin temp0;
+        forever begin
+            @(posedge bfm.clk);
+            if(in_sin.size() != 0) begin
+                temp0 = in_sin.pop_front();
+                if((checking(temp0.addr) == NONE) && (checking(temp0.data) == NONE)) begin
+                    if(temp0.prog == 1) begin
+                        temp1.addr = temp0.addr;
+                        temp1.port = temp0.data[1];
+                    end
+                    else if (temp0.prog == 0) begin
+                        x = check_sin1.find_index with (item.addr == temp0.addr);
+                        if(x.size() > 0) begin
+                            temp2.addr = temp0.addr;
+                            temp2.data = temp0.data;
+                            temp2.port = check_sin1[x[0]].port;
+                        end
+                    end
+                end
+
+                check_sin1.push_back(temp1);
+                check_sin0.push_back(temp2);
+            end
+        end
+    endtask
+
+    protected task sout_checking();
+        read_sout z;
+        int y[$];
+        forever begin
+            @(posedge bfm.clk);
+            if (out_sout.size() > 0) begin
+                z = out_sout.pop_front();
+            end
+        
+            y = check_sin0.find_index with (item.addr == z.addr && 
+                                            item.data == z.data && 
+                                            item.port == z.port);
+        
+            if (y.size() > 0) begin
+                check_sin0.delete(y[0]);
+            end
         end
     endtask
 
@@ -262,8 +240,10 @@ class scoreboard extends uvm_component;
     //------------------------------------------------------------------------------
         task run_phase(uvm_phase phase);
             fork
-                store_packet();
-                compare_output();
+                queue_sin();
+                queue_sout();
+                sin_checking();
+                sout_checking();
             join_none
         endtask : run_phase
 
@@ -272,6 +252,9 @@ class scoreboard extends uvm_component;
     //------------------------------------------------------------------------------
             function void report_phase(uvm_phase phase);
                 super.report_phase(phase);
+                if(check_sin0.size() != 0) begin
+                    tr = TEST_FAILED;
+                end
                 print_test_result(tr);
             endfunction : report_phase
 

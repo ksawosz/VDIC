@@ -20,6 +20,8 @@ package switch_tb_pkg;
         COLOR_DEFAULT
     } print_color;
 
+    typedef enum {NONE, START, PARITY, STOP} e_mistake;
+
 //------------------------------------------------------------------------------
 // package functions
 //------------------------------------------------------------------------------
@@ -43,6 +45,19 @@ package switch_tb_pkg;
         $write(ctl);
     endfunction
 
+    function e_mistake checking(input bit [0:10] packet);
+        if(packet[0] != 0) begin
+            return START;
+        end
+        if(packet[9] !=^ packet[1:8]) begin
+            return PARITY;
+        end
+        if(packet[10] != 1) begin
+            return STOP;
+        end
+        return NONE;
+    endfunction
+
 //------------------------------------------------------------------------------
 // testbench classes
 //------------------------------------------------------------------------------
@@ -50,14 +65,14 @@ package switch_tb_pkg;
 `include "scoreboard.svh"
 `include "base_tpgen.svh"
 `include "random_tpgen.svh"
-`include "add_tpgen.svh"
+`include "corner_tpgen.svh"
 `include "env.svh"
 
 //------------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------------
 `include "random_test.svh"
-`include "add_test.svh"
+`include "corner_test.svh"
   
   endpackage : switch_tb_pkg
   

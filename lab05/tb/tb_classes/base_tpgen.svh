@@ -34,6 +34,7 @@ virtual class base_tpgen extends uvm_component;
     // function prototypes
     //------------------------------------------------------------------------------
         pure virtual protected function byte get_data();
+        pure virtual protected task send_packets();
     
     //------------------------------------------------------------------------------
     // build phase
@@ -55,29 +56,10 @@ virtual class base_tpgen extends uvm_component;
             repeat(16) @(posedge bfm.clk); 
             bfm.rst_n = 1;
             repeat(16) @(posedge bfm.clk); 
-            bfm.prog = 1;
-            bfm.uart_send_byte(8'hFF);
-            bfm.uart_send_byte(8'h00);
-            repeat(1) @(posedge bfm.clk); 
-            bfm.uart_send_byte(8'h00);
-            bfm.uart_send_byte(8'h80);
-            repeat(1) @(posedge bfm.clk); 
-            bfm.prog = 0;
-            bfm.uart_send_byte(8'h00);
-            bfm.uart_send_byte(8'hFF);
-            repeat(1) @(posedge bfm.clk); 
-            bfm.uart_send_byte(8'hFF);
-            bfm.uart_send_byte(8'h00);
-            repeat(1) @(posedge bfm.clk);
-            bfm.uart_send_byte(8'h00);
-            bfm.send_wrong_packet(8'h00);
+            send_packets();
+            send_packets();
             bfm.rst_n = 0;
-            bfm.prog = 1;
-            bfm.uart_send_byte(8'hFF);
-            bfm.uart_send_byte(8'h00);
-            bfm.prog = 0;
-            bfm.uart_send_byte(8'hFF);
-            bfm.uart_send_byte(8'h00);
+            send_packets();
             repeat(1000) @(posedge bfm.clk);
             $display("Test sequence complete");
 

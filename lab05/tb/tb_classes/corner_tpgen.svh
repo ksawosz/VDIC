@@ -13,29 +13,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class add_test extends random_test;
-    `uvm_component_utils(add_test)
+class corner_tpgen extends random_tpgen;
+    `uvm_component_utils(corner_tpgen)
+
+    protected virtual switch_bfm bfm;
+
+    protected task send_packets();
+        bfm.prog = 1;
+        bfm.uart_send_byte(8'hFF);
+        bfm.uart_send_byte(8'h00);
+        bfm.uart_send_byte(8'h00);
+        bfm.uart_send_byte(8'h80);
+
+        bfm.prog = 0;
+        bfm.uart_send_byte(8'h00);
+        bfm.uart_send_byte(get_data());
+        bfm.uart_send_byte(8'hFF);
+        bfm.uart_send_byte(get_data());
+
+    endtask
+  
 
 //------------------------------------------------------------------------------
 // constructor
 //------------------------------------------------------------------------------
     function new (string name, uvm_component parent);
-        super.new(name,parent);
+        super.new(name, parent);
     endfunction : new
 
-//------------------------------------------------------------------------------
-// build phase
-//------------------------------------------------------------------------------
-    function void build_phase(uvm_phase phase);
-        
-        super.build_phase(phase);
 
-        // set the factory to produce a add_tpgen whenever it would produce
-        // a random_tpgen
-        random_tpgen::type_id::set_type_override(add_tpgen::get_type());
-
-    endfunction : build_phase
-
-
-endclass
-
+endclass : corner_tpgen
