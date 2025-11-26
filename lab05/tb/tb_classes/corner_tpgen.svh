@@ -16,10 +16,9 @@
 class corner_tpgen extends random_tpgen;
     `uvm_component_utils(corner_tpgen)
 
-    protected virtual switch_bfm bfm;
-
     protected task send_packets();
         bfm.prog = 1;
+
         bfm.uart_send_byte(8'hFF);
         bfm.uart_send_byte(8'h00);
         bfm.uart_send_byte(8'h00);

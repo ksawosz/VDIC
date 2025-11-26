@@ -35,6 +35,7 @@ virtual class base_tpgen extends uvm_component;
     //------------------------------------------------------------------------------
         pure virtual protected function byte get_data();
         pure virtual protected task send_packets();
+        pure virtual protected task send_wrong_packets();
     
     //------------------------------------------------------------------------------
     // build phase
@@ -56,15 +57,12 @@ virtual class base_tpgen extends uvm_component;
             repeat(16) @(posedge bfm.clk); 
             bfm.rst_n = 1;
             repeat(16) @(posedge bfm.clk); 
-            send_packets();
-            send_packets();
-            bfm.rst_n = 0;
-            send_packets();
+            repeat (500) send_packets();
+            repeat (500) send_wrong_packets();
             repeat(1000) @(posedge bfm.clk);
             $display("Test sequence complete");
 
-            phase.drop_objection(this);
-    
+            phase.drop_objection(this);    
     
         endtask : run_phase
     

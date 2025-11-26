@@ -40,12 +40,29 @@ class random_tpgen extends base_tpgen;
 
     protected task send_packets();
         bfm.prog = 1;
-        bfm.uart_send_byte(get_data());
+        bfm.uart_send_byte(8'h12);
         bfm.uart_send_byte(8'h00);
-        bfm.uart_send_byte(get_data());
+        bfm.uart_send_byte(8'h34);
         bfm.uart_send_byte(8'h80);
 
         bfm.prog = 0;
+        bfm.uart_send_byte(8'h12);
+        bfm.uart_send_byte(get_data());
+        bfm.uart_send_byte(8'h34);
+        bfm.uart_send_byte(get_data());
+
+    endtask
+
+    protected task send_wrong_packets();
+        bfm.prog = 1;
+        bfm.send_wrong_packet(get_data());
+        bfm.uart_send_byte(8'h00);
+        bfm.uart_send_byte(get_data());
+        bfm.send_wrong_packet(8'h80);
+
+        bfm.prog = 0;
+        bfm.uart_send_byte(get_data());
+        bfm.send_wrong_packet(get_data());
         bfm.uart_send_byte(get_data());
         bfm.uart_send_byte(get_data());
 

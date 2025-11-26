@@ -1,0 +1,186 @@
+csi-xmsim - CSI: Command line:
+xmsim
+    -f /home/student/ksawosz/VDIC/lab05/run/INCA_libs/run.lnx8664.24.09.d/cadence31_32284/xmsim.args
+        -INPUT @source /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.2/sv/files/tcl/uvm_sim.tcl
+        +UVM_NO_RELNOTES
+        +UVM_VERBOSITY=MEDIUM
+        +incdir+tb_classes
+        +incdir+.
+        +nowarn+DSEMEL
+        +nowarnDSEM2009
+        +nowarnDSEMEL
+        +nowarnCGDEFN
+        +nowarnCOVUTA
+        +nowarnBADPRF
+        +nowarnXCLGNOPTM
+        +nowarnRNDXCELON
+        +nowarnSAWSTP
+        -amsdlibdir ./INCA_libs/AMSD
+        -uvmhome /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.2/sv
+        -sv_lib /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.2/sv/lib/64bit/libuvmpli.so
+        -NOWARN DSEMEL
+        -NOWARN DSEM2009
+        -NOWARN DSEMEL
+        -NOWARN CGDEFN
+        -NOWARN COVUTA
+        -NOWARN BADPRF
+        -NOWARN XCLGNOPTM
+        -NOWARN RNDXCELON
+        -NOWARN SAWSTP
+        -NOCOPYRIGHT
+        -COVOVERWRITE
+        +UVM_TESTNAME=random_test
+        -MESSAGES
+        -RUN
+        -SV_LIB /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/methodology/UVM/CDNS-1.2/sv/lib/64bit/libuvmdpi.so
+        +EMGRLOG xrun_test_random_test.log
+        -XLSTIME 1764111225
+        -XLKEEP
+        -XLMODE ./INCA_libs/run.lnx8664.24.09.d
+        -RUNMODE
+        -CDSLIB ./INCA_libs/run.lnx8664.24.09.d/cds.lib
+        -HDLVAR ./INCA_libs/run.lnx8664.24.09.d/hdl.var
+        -XLNAME xrun
+        -XLVERSION TOOL:	xrun(64)	24.09-s005
+        -XLNAME ./INCA_libs/run.lnx8664.24.09.d/cadence31_32284
+    -CHECK_VERSION TOOL:	xrun(64)	24.09-s005
+    -LOG_FD 4
+    -LOG_FD_NAME xrun_test_random_test.log
+    -cmdnopsim
+    -runlock /home/student/ksawosz/VDIC/lab05/run/INCA_libs/run.lnx8664.24.09.d/.xmlib.lock
+    -runscratch /home/student/ksawosz/VDIC/lab05/run/INCA_libs/run.lnx8664.24.09.d/cadence31_32284
+Observed simulation time : 131237170 NS + 0
+
+csi-xmsim - CSI: *F,INTERR: INTERNAL EXCEPTION
+-----------------------------------------------------------------
+The tool has encountered an unexpected condition and must exit.
+Contact Cadence Design Systems customer support about this
+problem and provide enough information to help us reproduce it,
+including the logfile that contains this error message.
+  TOOL:	xmsim(64)	24.09-s005 (CL: 727498 )
+  HOSTNAME: cadence31
+  OPERATING SYSTEM: Linux 3.10.0-1160.119.1.el7.x86_64 #1 SMP Tue Jun 4 14:43:51 UTC 2024 x86_64
+  MESSAGE: sv_seghandler - trapno -1 addr(0x30)
+-----------------------------------------------------------------
+
+csi-xmsim - CSI: Cadence Support Investigation, recording details
+External Code in function: <unavailable> offset -65497
+External Code in function: <unavailable> offset -65535
+External Code in function: <unavailable> offset -65536
+Verilog Syntax Tree: package declaration (VST_D_PACKAGE) in verilog_package worklib.switch_tb_pkg:svh (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_tb_pkg.svh, line 1, position 20
+	Scope: switch_tb_pkg
+	Decompile: switch_tb_pkg
+	Source  : package switch_tb_pkg;
+	Position:                     ^
+Verilog Syntax Tree: module declaration (VST_D_MODULE) in module worklib.top:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/top.sv, line 22, position 9
+	Scope: top
+	Decompile: top
+	Source  : module top;
+	Position:          ^
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in interface worklib.switch_bfm:sv (SIG) <0x79aff7dd>
+	Decompile: switch_tb_pkg
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in interface worklib.switch_bfm:sv (SIG) <0x79aff7dd>
+	Decompile: top
+Verilog Syntax Tree: module declaration (VST_D_MODULE) in module worklib.simple_switch_uart:sv (VST)
+	File: /home/student/ksawosz/VDIC/common/simple_uart_switch.sv, line 25, position 24
+	Scope: simple_switch_uart
+	Decompile: simple_switch_uart#(CLKS_PER_BIT,DEBUG)
+	Source  : module simple_switch_uart (
+	Position:                         ^
+Verilog Syntax Tree: instance declaration (VST_D_INSTANCE) in module worklib.top:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/top.sv, line 29, position 25
+	Scope: top
+	Decompile: DUT
+	Source  :     simple_switch_uart DUT (
+	Position:                          ^
+Verilog Syntax Tree: covergroup declaration (VST_D_COVERGROUP) in verilog_package worklib.switch_tb_pkg:svh (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/tb_classes/coverage.svh, line 6, position 22
+	Scope: switch_tb_pkg::coverage
+	Decompile: unable to decompile type 611
+	Source  :     covergroup cov_data @(posedge bfm.clk);
+	Position:                       ^
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in module worklib.simple_switch_uart:sv (SIG) <0x79f54f30>
+	Decompile: simple_switch_uart#(CLKS_PER_BIT,DEBUG)
+Verilog Syntax Tree: wire declaration (VST_D_WIRE) in module worklib.simple_switch_uart:sv (VST)
+	File: /home/student/ksawosz/VDIC/common/simple_uart_switch.sv, line 26, position 18
+	Scope: simple_switch_uart
+	Decompile: logic clk
+	Source  :     input logic clk,     // posedge active clock
+	Position:                   ^
+Intermediate File: data block (IF_BLK) in snapshot worklib.top:sv (SSS)
+Simulator Snap Shot: tog reg cov (SSS_COV_TOG_REG) in snapshot worklib.top:sv (SSS)
+Verilog Syntax Tree: logic type (VST_T_LOGIC) in module worklib.simple_switch_uart:sv (VST)
+	Decompile: logic
+Simulator Snap Shot: gd (SSS_GD) in snapshot worklib.top:sv (SSS)
+Verilog Syntax Tree: repeat statement (VST_S_REPEAT) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 50, position 18
+	Scope: switch_bfm.send_wrong_packet
+	Decompile: 16
+	Source  :     sin = 1; repeat (16) @(posedge clk);
+	Position:                   ^
+Verilog Syntax Tree: task enable statement (VST_S_TASK_ENABLE) in module worklib.top:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/top.sv, line 39, position 15
+	Scope: top
+	Decompile: unable to decompile type 651
+	Source  :         run_test();
+	Position:                ^
+Verilog Syntax Tree: null statement (VST_S_NULL) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 20, position 11
+	Scope: switch_bfm
+	Decompile: null statement
+	Source  :         #10;
+	Position:            ^
+Intermediate File: root (IF_ROOT) in interface worklib.switch_bfm:sv (VST)
+Verilog Syntax Tree: null statement (VST_S_NULL) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 50, position 39
+	Scope: switch_bfm.send_wrong_packet
+	Decompile: null statement
+	Source  :     sin = 1; repeat (16) @(posedge clk);
+	Position:                                        ^
+External Code in function: <unavailable> offset -65024
+Verilog Syntax Tree: bit wise xor expression (VST_E_BIT_WISE_XOR) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 46, position 16
+	Decompile: (parity ^ data[i])
+	Source  :         parity ^= data[i];
+	Position:                 ^
+External Code in function: <unavailable> offset -65523
+Verilog Syntax Tree: repeat statement (VST_S_REPEAT) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 47, position 13
+	Scope: switch_bfm.send_wrong_packet
+	Decompile: 16
+	Source  :         repeat (16) @(posedge clk);
+	Position:              ^
+Verilog Syntax Tree: null statement (VST_S_NULL) in interface worklib.switch_bfm:sv (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/switch_bfm.sv, line 47, position 34
+	Scope: switch_bfm.send_wrong_packet
+	Decompile: null statement
+	Source  :         repeat (16) @(posedge clk);
+	Position:                                   ^
+Intermediate File: string (IF_STRING) in verilog_package worklib.cdns_uvm_pkg:sv (VST)
+	Decompile: cdns_uvm_pkg
+Intermediate File: array of pointers (IF_PTRBLK) in snapshot worklib.top:sv (SSS)
+Simulator Snap Shot: root (SSS_ROOT) in snapshot worklib.top:sv (SSS)
+Intermediate File: root (IF_ROOT)
+Intermediate File: string (IF_STRING) in snapshot worklib.top:sv (SSS)
+	Decompile: /eda/cadence/2024-25/RHELx86/XCELIUM_24.09.005/tools/lib/64bit/libsdi-verilog-nld
+Simulator Snap Shot: dynlib (SSS_DYNLIB) in snapshot worklib.top:sv (SSS)
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in verilog_package worklib.cdns_uvm_pkg:sv (SIG) <0x5a1a02dc>
+	Decompile: uvm_pkg::uvm_object_registry#(T,Tname)
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in verilog_package worklib.uvm_pkg:sv (SIG) <0x393bf8aa>
+	Decompile: uvm_pkg::uvm_callbacks#(T,CB)
+Simulator Snap Shot: top level instance (SSS_TLI) in snapshot worklib.top:sv (SSS)
+Error: Error processing stack frame(16) - skipping rest of frame!
+Error: Error processing stack frame(17) - skipping rest of frame!
+External Code in function: <unavailable> offset -64224
+External Code in function: <unavailable> offset -63536
+Verilog Syntax Tree: number expression (VST_E_NUMBER) in verilog_package worklib.switch_tb_pkg:svh (VST)
+	File: /home/student/ksawosz/VDIC/lab05/tb/tb_classes/coverage.svh, line 16, position 21
+	Decompile: 8'b11111111
+	Source  :         bins max1 = {8'b11111111};
+	Position:                      ^
+Verilog Syntax Tree: overlay table (VST_OVERLAY_TABLE) in verilog_package worklib.uvm_pkg:sv (SIG) <0x393bf8aa>
+	Decompile: uvm_pkg::uvm_config_db#(T)
+External Code in function: <unavailable> offset -65504
+csi-xmsim - CSI: investigation complete took 0.047 secs, send this file to Cadence Support

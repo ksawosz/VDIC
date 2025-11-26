@@ -36,7 +36,7 @@ module top;
 
     initial begin
         uvm_config_db #(virtual switch_bfm)::set(null, "*", "bfm", bfm);
-        run_test();
+        run_test("corner_test");
     end
 
 endmodule : top
