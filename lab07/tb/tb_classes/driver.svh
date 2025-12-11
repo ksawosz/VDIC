@@ -13,20 +13,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class result_monitor extends uvm_component;
-    `uvm_component_utils(result_monitor)
-
+class driver extends uvm_component;
+    `uvm_component_utils(driver)
+    
 //------------------------------------------------------------------------------
 // local variables
 //------------------------------------------------------------------------------
-
-    protected virtual tinyalu_bfm bfm;
-    uvm_analysis_port #(result_transaction) ap;
-
+    protected virtual switch_bfm bfm;
+    uvm_get_port #(packet_transaction) pkt_port;
+    
 //------------------------------------------------------------------------------
 // constructor
 //------------------------------------------------------------------------------
-
     function new (string name, uvm_component parent);
         super.new(name, parent);
     endfunction : new
@@ -34,34 +32,39 @@ class result_monitor extends uvm_component;
 //------------------------------------------------------------------------------
 // build phase
 //------------------------------------------------------------------------------
-
     function void build_phase(uvm_phase phase);
-        if(!uvm_config_db #(virtual tinyalu_bfm)::get(null, "*","bfm", bfm))
-            `uvm_fatal("RESULT MONITOR", "Failed to get BFM")
-
-        bfm.result_monitor_h = this;
-        ap                   = new("ap",this);
+        if(!uvm_config_db #(virtual switch_bfm)::get(null, "*","bfm", bfm))
+            $fatal(1, "Failed to get BFM");
+        pkt_port = new("pkt_port",this);
     endfunction : build_phase
-
+    
 //------------------------------------------------------------------------------
-// access function for BFM
+// run phase
 //------------------------------------------------------------------------------
-    // this variable is defined here as static for that you can see it in the
-    // Simvision waveforms.
-    result_transaction result_t;
+    task run_phase(uvm_phase phase);
+        packet_transaction pkt;
+        bfm.sin = 1;
+        bfm.rst_n = 0;
+        repeat(16) @(posedge bfm.clk);
+        bfm.rst_n = 1;
 
-    function void write_to_monitor(shortint r);
-//        result_transaction result_t;
-        result_t        = new("result_t");
-        result_t.result = r;
-        ap.write(result_t);
-    endfunction : write_to_monitor
+        forever begin : command_loop
+            pkt_port.get(pkt);
+            bfm.prog = pkt.prog;
+            bfm.rst_n = pkt.rst_n;
 
+            if(bfm.is_err == 0) begin
+                bfm.uart_send_byte(pkt.addr[9:2], 0);
+                bfm.uart_send_byte(pkt.data[9:2], 0);
+            end
 
-endclass : result_monitor
+            else begin
+                bfm.uart_send_byte(pkt.addr[9:2], 0);
+                bfm.uart_send_byte(pkt.data[9:2], 1);
+            end
+        end : command_loop
+    endtask : run_phase
+    
 
-
-
-
-
+endclass : driver
 

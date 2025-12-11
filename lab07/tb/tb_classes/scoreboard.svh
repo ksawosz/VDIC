@@ -1,4 +1,4 @@
-class scoreboard extends uvm_subscriber #(read_sout);
+class scoreboard extends uvm_subscriber #(result_transaction);
     `uvm_component_utils(scoreboard)
 
     //------------------------------------------------------------------------------
@@ -25,14 +25,14 @@ class scoreboard extends uvm_subscriber #(read_sout);
         bit port;
     } check_sin;
 
-    //`define DEBUG
+   // `define DEBUG
 
     //------------------------------------------------------------------------------
     // local variables
     //------------------------------------------------------------------------------
 
     //protected virtual switch_bfm bfm;
-    uvm_tlm_analysis_fifo #(read_sin) pkt_f;
+    uvm_tlm_analysis_fifo #(packet_transaction) pkt_f;
 
     local test_result tr = TEST_PASSED; // the result of the current test
 
@@ -51,13 +51,47 @@ class scoreboard extends uvm_subscriber #(read_sout);
     endfunction : new
 
     //------------------------------------------------------------------------------
+    // print the PASSED/FAILED in color
+    //------------------------------------------------------------------------------
+    local function void print_test_result (test_result r);
+        if(tr == TEST_PASSED) begin
+            set_print_color(COLOR_BOLD_BLACK_ON_GREEN);
+            $write ("-----------------------------------\n");
+            $write ("----------- Test PASSED -----------\n");
+            $write ("-----------------------------------");
+            set_print_color(COLOR_DEFAULT);
+            $write ("\n");
+        end
+        else begin
+            set_print_color(COLOR_BOLD_BLACK_ON_RED);
+            $write ("-----------------------------------\n");
+            $write ("----------- Test FAILED -----------\n");
+            $write ("-----------------------------------");
+            set_print_color(COLOR_DEFAULT);
+            $write ("\n");
+        end
+    endfunction
+
+    //------------------------------------------------------------------------------
+    // build phase
+    //------------------------------------------------------------------------------
+    function void build_phase(uvm_phase phase);
+        pkt_f = new ("pkt_f", this);
+    endfunction : build_phase
+
+
+    //------------------------------------------------------------------------------
     // local tasks
     //------------------------------------------------------------------------------
 
-    function void sin_checking(read_sin temp0);
+    function void sin_checking(packet_transaction temp_sin);
         int x[$];
+        read_sin temp0;
         check_sin temp1;
         read_sout temp2;
+        temp0.addr = temp_sin.addr;
+        temp0.data = temp_sin.data;
+        temp0.prog = temp_sin.prog;
             // === DEBUG temp0 ===
         `ifdef DEBUG
         $display("[sin_checking] @%0t temp0.addr = %0b", $time, temp0.addr);
@@ -130,7 +164,7 @@ class scoreboard extends uvm_subscriber #(read_sout);
 
         if (y.size() > 0) begin
             // === DEBUG o znalezieniu ===
-            `ifdef DEBUGpkt_f
+            `ifdef DEBUG
             $display("[sout_checking] MATCH found at index %0d — deleting", y[0]);
             $display("[sout_checking]  check_sin0[y[0]].addr = %p", check_sin0[y[0]].addr);
             $display("[sout_checking]  check_sin0[y[0]].data = %p", check_sin0[y[0]].data);
@@ -146,47 +180,17 @@ class scoreboard extends uvm_subscriber #(read_sout);
         end
     endfunction
 
-
-    //------------------------------------------------------------------------------
-    // print the PASSED/FAILED in color
-    //------------------------------------------------------------------------------
-    local function void print_test_result (test_result r);
-        if(tr == TEST_PASSED) begin
-            set_print_color(COLOR_BOLD_BLACK_ON_GREEN);
-            $write ("-----------------------------------\n");
-            $write ("----------- Test PASSED -----------\n");
-            $write ("-----------------------------------");
-            set_print_color(COLOR_DEFAULT);
-            $write ("\n");
-        end
-        else begin
-            set_print_color(COLOR_BOLD_BLACK_ON_RED);
-            $write ("-----------------------------------\n");
-            $write ("----------- Test FAILED -----------\n");
-            $write ("-----------------------------------");
-            set_print_color(COLOR_DEFAULT);
-            $write ("\n");
-        end
-    endfunction
-
-    //------------------------------------------------------------------------------
-    // build phase
-    //------------------------------------------------------------------------------
-        function void build_phase(uvm_phase phase);
-            pkt_f = new ("pkt_f", this);
-        endfunction : build_phase
-
     //------------------------------------------------------------------------------
     // subscriber write function
     //------------------------------------------------------------------------------
-        function void write(read_sout t);
-            read_sin pkt;
+        function void write(result_transaction t);
+            packet_transaction pkt;
             while(!pkt_f.is_empty()) begin
                 if(!pkt_f.try_get(pkt)) begin
                     sin_checking(pkt);
                 end
             end
-            sout_checking(t);
+            sout_checking(t.result);
         endfunction
 
     //------------------------------------------------------------------------------

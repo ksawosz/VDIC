@@ -19,14 +19,12 @@ class result_monitor extends uvm_component;
 //------------------------------------------------------------------------------
 // local variables
 //------------------------------------------------------------------------------
-
-    protected virtual tinyalu_bfm bfm;
+    protected virtual switch_bfm bfm;
     uvm_analysis_port #(result_transaction) ap;
 
 //------------------------------------------------------------------------------
 // constructor
 //------------------------------------------------------------------------------
-
     function new (string name, uvm_component parent);
         super.new(name, parent);
     endfunction : new
@@ -34,28 +32,23 @@ class result_monitor extends uvm_component;
 //------------------------------------------------------------------------------
 // build phase
 //------------------------------------------------------------------------------
-
     function void build_phase(uvm_phase phase);
-        if(!uvm_config_db #(virtual tinyalu_bfm)::get(null, "*","bfm", bfm))
-            `uvm_fatal("RESULT MONITOR", "Failed to get BFM")
-
+        if(!uvm_config_db #(virtual switch_bfm)::get(null, "*","bfm", bfm))
+            $fatal(1, "Failed to get BFM");
         bfm.result_monitor_h = this;
         ap                   = new("ap",this);
     endfunction : build_phase
 
 //------------------------------------------------------------------------------
-// access function for BFM
+// monitoring function called from BFM
 //------------------------------------------------------------------------------
-    // this variable is defined here as static for that you can see it in the
-    // Simvision waveforms.
-    result_transaction result_t;
-
-    function void write_to_monitor(shortint r);
-//        result_transaction result_t;
-        result_t        = new("result_t");
-        result_t.result = r;
-        ap.write(result_t);
+    
+    function void write_to_monitor(result_transaction r);
+        ap.write(r);
     endfunction : write_to_monitor
+
+
+
 
 
 endclass : result_monitor

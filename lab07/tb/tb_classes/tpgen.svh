@@ -13,15 +13,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class result_monitor extends uvm_component;
-    `uvm_component_utils(result_monitor)
+class tpgen extends uvm_component;
+    `uvm_component_utils (tpgen)
 
 //------------------------------------------------------------------------------
 // local variables
 //------------------------------------------------------------------------------
 
-    protected virtual tinyalu_bfm bfm;
-    uvm_analysis_port #(result_transaction) ap;
+    uvm_put_port #(packet_transaction) packet_port;
 
 //------------------------------------------------------------------------------
 // constructor
@@ -31,34 +30,56 @@ class result_monitor extends uvm_component;
         super.new(name, parent);
     endfunction : new
 
-//------------------------------------------------------------------------------
-// build phase
-//------------------------------------------------------------------------------
-
     function void build_phase(uvm_phase phase);
-        if(!uvm_config_db #(virtual tinyalu_bfm)::get(null, "*","bfm", bfm))
-            `uvm_fatal("RESULT MONITOR", "Failed to get BFM")
-
-        bfm.result_monitor_h = this;
-        ap                   = new("ap",this);
+        packet_port = new("packet_port", this);
     endfunction : build_phase
 
+    protected function byte get_data();
+        bit [1:0] zero_ones;
+        zero_ones = 2'($random);
+        if (zero_ones == 2'b00)
+            return 8'h00;
+        else if (zero_ones == 2'b11)
+            return 8'hFF;
+        else
+            return byte'($random);
+    endfunction : get_data
+
 //------------------------------------------------------------------------------
-// access function for BFM
+// run phase
 //------------------------------------------------------------------------------
-    // this variable is defined here as static for that you can see it in the
-    // Simvision waveforms.
-    result_transaction result_t;
 
-    function void write_to_monitor(shortint r);
-//        result_transaction result_t;
-        result_t        = new("result_t");
-        result_t.result = r;
-        ap.write(result_t);
-    endfunction : write_to_monitor
+    task run_phase(uvm_phase phase);
+        packet_transaction packet;
+
+        phase.raise_objection(this);
+
+        packet    = new("packet");
+
+        packet.prog = 1;
+        packet.is_err = 0;
+        packet.addr = 11'h12;
+        packet.data = 11'h00;
+        packet_port.put(packet);
+        packet.addr = 11'h34;
+        packet.data = 11'h80;
+        packet_port.put(packet);
+
+        packet.prog = 0;
+        packet.addr = 11'h12;
+        packet.data = 11'b01100110111;
+        packet_port.put(packet);
+        packet.addr = 11'h34;
+        packet.is_err = 1;
+        packet.data = 11'b01100110111;
+        packet_port.put(packet);
+
+        #100000;
+        phase.drop_objection(this);
+    endtask : run_phase
 
 
-endclass : result_monitor
+endclass : tpgen
 
 
 

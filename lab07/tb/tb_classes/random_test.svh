@@ -13,22 +13,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-class result_monitor extends uvm_component;
-    `uvm_component_utils(result_monitor)
+class random_test extends uvm_test;
+    `uvm_component_utils(random_test)
 
 //------------------------------------------------------------------------------
-// local variables
+// env
 //------------------------------------------------------------------------------
 
-    protected virtual tinyalu_bfm bfm;
-    uvm_analysis_port #(result_transaction) ap;
+    env env_h;
 
 //------------------------------------------------------------------------------
 // constructor
 //------------------------------------------------------------------------------
 
     function new (string name, uvm_component parent);
-        super.new(name, parent);
+        super.new(name,parent);
     endfunction : new
 
 //------------------------------------------------------------------------------
@@ -36,32 +35,28 @@ class result_monitor extends uvm_component;
 //------------------------------------------------------------------------------
 
     function void build_phase(uvm_phase phase);
-        if(!uvm_config_db #(virtual tinyalu_bfm)::get(null, "*","bfm", bfm))
-            `uvm_fatal("RESULT MONITOR", "Failed to get BFM")
-
-        bfm.result_monitor_h = this;
-        ap                   = new("ap",this);
+        env_h = env::type_id::create("env",this);
     endfunction : build_phase
 
 //------------------------------------------------------------------------------
-// access function for BFM
+// end-of-elaboration phase
 //------------------------------------------------------------------------------
-    // this variable is defined here as static for that you can see it in the
-    // Simvision waveforms.
-    result_transaction result_t;
 
-    function void write_to_monitor(shortint r);
-//        result_transaction result_t;
-        result_t        = new("result_t");
-        result_t.result = r;
-        ap.write(result_t);
-    endfunction : write_to_monitor
+    function void end_of_elaboration_phase(uvm_phase phase);
+        packet_transaction tmp;               // transaction object to check the type generated
 
+        // other printers available:
+        // - uvm_default_line_printer
+        // - uvm_default_tree_printer
+        set_print_color(COLOR_BLUE_ON_WHITE);
+        this.print(uvm_default_table_printer); // print test env topology
+        set_print_color(COLOR_DEFAULT);
 
-endclass : result_monitor
+        // printing the type of the transaction generated
+        tmp = packet_transaction::type_id::create("packet_transaction", this);
+        set_print_color(COLOR_BOLD_BLACK_ON_YELLOW);
+        `uvm_info("PACKET TRANSACTION", tmp.get_type_name(), UVM_NONE)
+        set_print_color(COLOR_DEFAULT);
+    endfunction : end_of_elaboration_phase
 
-
-
-
-
-
+endclass

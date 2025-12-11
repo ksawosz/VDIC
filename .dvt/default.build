@@ -2,9 +2,9 @@
 # DO NOT explicitly list files/directories in 'dvt_init_auto' sections. Use 'dvt_init' sections instead.
 +dvt_init
 
--F ./lab06/tb/tb.f
+-F ./lab07/tb/tb.f
 
-+incdir+lab06/tb/tb_classes
-+incdir+lab06/tb
++incdir+lab07/tb/tb_classes
++incdir+lab07/tb
 
 -top top
